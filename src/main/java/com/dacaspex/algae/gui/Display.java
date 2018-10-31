@@ -1,6 +1,12 @@
 package com.dacaspex.algae.gui;
 
+import com.dacaspex.algae.colorScheme.Grayscale;
+import com.dacaspex.algae.fractal.JuliaFractal;
 import com.dacaspex.algae.main.Application;
+import com.dacaspex.algae.math.Complex;
+import com.dacaspex.algae.math.Scale;
+import com.dacaspex.algae.math.Vector2d;
+import com.dacaspex.algae.render.settings.RenderSettings;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,7 +33,7 @@ public class Display extends JFrame {
     }
 
     private void build() {
-        setPreferredSize(new Dimension(600, 400));
+        setPreferredSize(new Dimension(800, 800));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(panel);
         setVisible(true);
@@ -35,7 +41,12 @@ public class Display extends JFrame {
     }
 
     private void startup() {
-
+        Application.get().getRenderer().render(
+                new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
+                new Grayscale(),
+                new Scale(new Vector2d(), 0.5, 0.002),
+                new RenderSettings(800, 800)
+        );
     }
 
     private class Panel extends JPanel {

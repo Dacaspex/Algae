@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface PreProcessor {
 
-    public void read(Complex input, List<Complex>[] sequence);
+    public void read(Complex input, List<Complex> sequence);
 }

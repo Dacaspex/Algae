@@ -89,19 +89,26 @@ public class Complex {
             mul(this);
         }
 
-        return this.clone();
+        return this.copy();
     }
 
     public Complex powi(int k) {
-        for (int i = 0; i < k; i++) {
-            mul(this);
+        for (int i = 0; i < k - 1; i++) {
+            muli(this);
         }
 
         return this;
     }
 
-    @Override
-    public Complex clone() {
+    public Complex copy() {
         return new Complex(real, imaginary);
+    }
+
+    @Override
+    public String toString() {
+        String realSign = real >= 0 ? "" : "-";
+        String imaginarySign = imaginary >= 0 ? "+" : "-";
+
+        return realSign + real + imaginarySign + imaginary + "i";
     }
 }
