@@ -16,6 +16,10 @@ public class Application {
         return renderer;
     }
 
+    public void close() {
+        System.exit(0);
+    }
+
     public static Application get() {
         if (app == null) {
             app = new Application();

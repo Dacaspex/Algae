@@ -2,6 +2,7 @@ package com.dacaspex.algae.gui;
 
 import com.dacaspex.algae.colorScheme.Grayscale;
 import com.dacaspex.algae.fractal.JuliaFractal;
+import com.dacaspex.algae.gui.menu.MenuBar;
 import com.dacaspex.algae.main.Application;
 import com.dacaspex.algae.math.Complex;
 import com.dacaspex.algae.math.Scale;
@@ -12,30 +13,46 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 
-public class Display extends JFrame {
+public class Display extends JFrame implements KeyListener {
 
     private Panel panel;
+    private MenuBar menuBar;
+    private ColorSchemeSettingsDisplay colorSchemeSettingsDisplay;
     private BufferedImage image;
 
     public Display() {
         this.panel = new Panel();
+        this.menuBar = new MenuBar(this);
+        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay();
         this.image = new BufferedImage(600, 400, BufferedImage.TYPE_INT_RGB);
 
         Application.get().getRenderer().setListener(i -> {
             image = i;
             repaint();
         });
+        addKeyListener(this);
 
         build();
         startup();
+    }
+
+    public void openFractalSettings() {
+
+    }
+
+    public void openColorSchemeSettings() {
+        colorSchemeSettingsDisplay.open();
     }
 
     private void build() {
         setPreferredSize(new Dimension(800, 800));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(panel);
+        setJMenuBar(menuBar);
         setVisible(true);
         pack();
     }
@@ -55,5 +72,27 @@ public class Display extends JFrame {
             super.paint(g);
             g.drawImage(image, 0, 0, null);
         }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_ESCAPE:
+                Application.get().close();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 }
