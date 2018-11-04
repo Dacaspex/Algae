@@ -1,8 +1,12 @@
 package com.dacaspex.algae.gui;
 
+import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.colorScheme.Grayscale;
+import com.dacaspex.algae.fractal.Fractal;
 import com.dacaspex.algae.fractal.JuliaFractal;
 import com.dacaspex.algae.gui.menu.MenuBar;
+import com.dacaspex.algae.gui.settings.ColorSchemeSettingsDisplay;
+import com.dacaspex.algae.gui.settings.colorScheme.GrayscaleSettings;
 import com.dacaspex.algae.main.Application;
 import com.dacaspex.algae.math.Complex;
 import com.dacaspex.algae.math.Scale;
@@ -24,10 +28,13 @@ public class Display extends JFrame implements KeyListener {
     private ColorSchemeSettingsDisplay colorSchemeSettingsDisplay;
     private BufferedImage image;
 
+    private Fractal activeFractal;
+    private ColorScheme activeColorScheme;
+
     public Display() {
         this.panel = new Panel();
         this.menuBar = new MenuBar(this);
-        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay();
+        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
         this.image = new BufferedImage(600, 400, BufferedImage.TYPE_INT_RGB);
 
         Application.get().getRenderer().setListener(i -> {
@@ -48,6 +55,15 @@ public class Display extends JFrame implements KeyListener {
         colorSchemeSettingsDisplay.open();
     }
 
+    public void onColorSchemeSettingsUpdated() {
+        Application.get().getRenderer().render(
+                new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
+                colorSchemeSettingsDisplay.getSettings().getColorScheme(),
+                new Scale(new Vector2d(), 0.5, 0.002),
+                new RenderSettings(800, 800)
+        );
+    }
+
     private void build() {
         setPreferredSize(new Dimension(800, 800));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +76,7 @@ public class Display extends JFrame implements KeyListener {
     private void startup() {
         Application.get().getRenderer().render(
                 new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
-                new Grayscale(),
+                new Grayscale(512),
                 new Scale(new Vector2d(), 0.5, 0.002),
                 new RenderSettings(800, 800)
         );

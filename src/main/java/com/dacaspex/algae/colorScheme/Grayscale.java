@@ -8,6 +8,12 @@ import java.util.List;
 
 public class Grayscale implements ColorScheme {
 
+    private double divisor;
+
+    public Grayscale(double divisor) {
+        this.divisor = divisor;
+    }
+
     @Override
     public PreProcessor getPreProcessor() {
         return null;
@@ -15,7 +21,7 @@ public class Grayscale implements ColorScheme {
 
     @Override
     public Color getColor(List<Complex> sequence) {
-        int gray = (int) ((sequence.size() / 512.0) * 255);
+        int gray = (int) Math.min((sequence.size() / divisor) * 255, 255);
 
         return new Color(gray, gray, gray);
     }
