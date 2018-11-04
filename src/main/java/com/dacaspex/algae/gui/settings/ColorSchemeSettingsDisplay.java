@@ -77,12 +77,7 @@ public class ColorSchemeSettingsDisplay extends JFrame implements KeyListener, P
 
     @Override
     public void onPropertyUpdated(Property property) {
-        display.onColorSchemeSettingsUpdated();
-
-        // Returns color scheme
-
-        // ColorSchemeSettings -> getColorScheme(): ColorScheme
-        //                     -> getProperties(): Property[]
+        display.render();
     }
 
     @Override

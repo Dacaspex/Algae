@@ -1,8 +1,5 @@
 package com.dacaspex.algae.gui;
 
-import com.dacaspex.algae.colorScheme.ColorScheme;
-import com.dacaspex.algae.colorScheme.Grayscale;
-import com.dacaspex.algae.fractal.Fractal;
 import com.dacaspex.algae.fractal.JuliaFractal;
 import com.dacaspex.algae.gui.menu.MenuBar;
 import com.dacaspex.algae.gui.settings.ColorSchemeSettingsDisplay;
@@ -19,32 +16,39 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 
-public class Display extends JFrame implements KeyListener {
+public class Display extends JFrame implements KeyListener, MouseListener {
+
+    private int width, height;
 
     private Panel panel;
     private MenuBar menuBar;
     private ColorSchemeSettingsDisplay colorSchemeSettingsDisplay;
     private BufferedImage image;
 
-    private Fractal activeFractal;
-    private ColorScheme activeColorScheme;
+    private Scale scale;
 
     public Display() {
+        this.width = 600;
+        this.height = 400;
         this.panel = new Panel();
         this.menuBar = new MenuBar(this);
         this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
-        this.image = new BufferedImage(600, 400, BufferedImage.TYPE_INT_RGB);
+        this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        this.scale = new Scale(new Vector2d(), 0.5, 0.002);
 
         Application.get().getRenderer().setListener(i -> {
             image = i;
             repaint();
         });
         addKeyListener(this);
+        addMouseListener(this);
 
         build();
-        startup();
+        render();
     }
 
     public void openFractalSettings() {
@@ -55,11 +59,11 @@ public class Display extends JFrame implements KeyListener {
         colorSchemeSettingsDisplay.open();
     }
 
-    public void onColorSchemeSettingsUpdated() {
+    public void render() {
         Application.get().getRenderer().render(
                 new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
                 colorSchemeSettingsDisplay.getSettings().getColorScheme(),
-                new Scale(new Vector2d(), 0.5, 0.002),
+                scale,
                 new RenderSettings(800, 800)
         );
     }
@@ -73,13 +77,12 @@ public class Display extends JFrame implements KeyListener {
         pack();
     }
 
-    private void startup() {
-        Application.get().getRenderer().render(
-                new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
-                new Grayscale(512),
-                new Scale(new Vector2d(), 0.5, 0.002),
-                new RenderSettings(800, 800)
-        );
+    private void zoomIn(Vector2d target) {
+        Vector2d center = scale.getScreenPointInScale(target, getWidth(), getHeight());
+        scale.setCenter(center);
+        scale.setZoomLevel(scale.getZoomLevel() * 2);
+
+        render();
     }
 
     private class Panel extends JPanel {
@@ -92,7 +95,6 @@ public class Display extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
@@ -109,6 +111,33 @@ public class Display extends JFrame implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+    }
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        switch (e.getButton()) {
+            case MouseEvent.BUTTON1:
+                zoomIn(new Vector2d(e.getPoint().x, e.getPoint().y));
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }
