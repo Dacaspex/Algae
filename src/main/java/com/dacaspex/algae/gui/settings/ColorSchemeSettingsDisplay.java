@@ -33,6 +33,11 @@ public class ColorSchemeSettingsDisplay extends JFrame implements KeyListener, P
         return settings;
     }
 
+    public void setSettings(ColorSchemeSettings settings) {
+        this.settings = settings;
+        buildPropertySheet();
+    }
+
     public void open() {
         setVisible(true);
     }
@@ -45,14 +50,21 @@ public class ColorSchemeSettingsDisplay extends JFrame implements KeyListener, P
         setPreferredSize(new Dimension(400, 600));
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
-        for (Property p : settings.getProperties()) {
-            propertySheet.addProperty(p);
-        }
-
+        buildPropertySheet();
         add(new JScrollPane(propertySheet));
 
         setVisible(false);
         pack();
+    }
+
+    private void buildPropertySheet() {
+        propertySheet.clear();
+
+        for (Property p : settings.getProperties()) {
+            propertySheet.addProperty(p);
+        }
+
+        propertySheet.repaint();
     }
 
     @Override

@@ -12,43 +12,57 @@ import com.dacaspex.algae.render.settings.RenderSettings;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
-public class Display extends JFrame implements KeyListener, MouseListener {
+public class Display extends JFrame implements KeyListener {
 
     private int width, height;
-
     private Panel panel;
     private MenuBar menuBar;
+
     private ColorSchemeSettingsDisplay colorSchemeSettingsDisplay;
     private BufferedImage image;
-
     private Scale scale;
 
+    private Timer resizeDelayTimer;
+
     public Display() {
-        this.width = 600;
-        this.height = 400;
+        this.width = 800;
+        this.height = 1000;
         this.panel = new Panel();
         this.menuBar = new MenuBar(this);
-        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
         this.image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         this.scale = new Scale(new Vector2d(), 0.5, 0.002);
+
+        // Settings menus
+        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
+
+        // Resize delay timer
+        this.resizeDelayTimer = new Timer(200, e -> render());
 
         Application.get().getRenderer().setListener(i -> {
             image = i;
             repaint();
         });
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                super.componentResized(e);
+                resizeDelayTimer.restart();
+            }
+        });
         addKeyListener(this);
-        addMouseListener(this);
 
         build();
         render();
+    }
+
+    public ColorSchemeSettingsDisplay getColorSchemeSettingsDisplay() {
+        return colorSchemeSettingsDisplay;
     }
 
     public void openFractalSettings() {
@@ -64,33 +78,40 @@ public class Display extends JFrame implements KeyListener, MouseListener {
                 new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
                 colorSchemeSettingsDisplay.getSettings().getColorScheme(),
                 scale,
-                new RenderSettings(800, 800)
+                new RenderSettings(panel.getWidth(), panel.getHeight())
         );
     }
 
     private void build() {
-        setPreferredSize(new Dimension(800, 800));
+        setPreferredSize(new Dimension(width, height));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        add(panel);
         setJMenuBar(menuBar);
+        add(panel);
         setVisible(true);
         pack();
     }
 
     private void zoomIn(Vector2d target) {
-        Vector2d center = scale.getScreenPointInScale(target, getWidth(), getHeight());
+        Vector2d center = scale.getScreenPointInScale(target, panel.getWidth(), panel.getHeight());
         scale.setCenter(center);
         scale.setZoomLevel(scale.getZoomLevel() * 2);
 
         render();
     }
 
-    private class Panel extends JPanel {
-        @Override
-        public void paint(Graphics g) {
-            super.paint(g);
-            g.drawImage(image, 0, 0, null);
-        }
+    private void zoomOut(Vector2d target) {
+        Vector2d center = scale.getScreenPointInScale(target, panel.getWidth(), panel.getHeight());
+        scale.setCenter(center);
+        scale.setZoomLevel(scale.getZoomLevel() / 2);
+
+        render();
+    }
+
+    private void translate(Vector2d target) {
+        Vector2d center = scale.getScreenPointInScale(target, panel.getWidth(), panel.getHeight());
+        scale.setCenter(center);
+
+        render();
     }
 
     @Override
@@ -113,31 +134,39 @@ public class Display extends JFrame implements KeyListener, MouseListener {
     public void keyReleased(KeyEvent e) {
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        switch (e.getButton()) {
-            case MouseEvent.BUTTON1:
-                zoomIn(new Vector2d(e.getPoint().x, e.getPoint().y));
-                break;
+    private class Panel extends JPanel {
 
-            default:
-                break;
+        public Panel() {
+            addMouseListener(new MouseListener());
+        }
+
+        @Override
+        public void paint(Graphics g) {
+            super.paint(g);
+            g.drawImage(image, 0, 0, null);
+        }
+
+        private class MouseListener extends MouseAdapter {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                switch (e.getButton()) {
+                    case MouseEvent.BUTTON1:
+                        zoomIn(new Vector2d(e.getPoint().x, e.getPoint().y));
+                        break;
+
+                    case MouseEvent.BUTTON3:
+                        zoomOut(new Vector2d(e.getPoint().x, e.getPoint().y));
+                        break;
+
+                    case MouseEvent.BUTTON2:
+                        translate(new Vector2d(e.getPoint().x, e.getPoint().y));
+                        break;
+
+                    default:
+                        break;
+                }
+            }
         }
     }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-    }
 }
+

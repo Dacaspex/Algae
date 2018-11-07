@@ -50,4 +50,9 @@ public class Vector2d {
     public Vector2d copy() {
         return new Vector2d(x, y);
     }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
 }

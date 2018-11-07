@@ -9,9 +9,11 @@ import java.util.List;
 public class Grayscale implements ColorScheme {
 
     private double divisor;
+    private boolean inverted;
 
-    public Grayscale(double divisor) {
+    public Grayscale(double divisor, boolean inverted) {
         this.divisor = divisor;
+        this.inverted = inverted;
     }
 
     @Override
@@ -21,8 +23,13 @@ public class Grayscale implements ColorScheme {
 
     @Override
     public Color getColor(List<Complex> sequence) {
-        int gray = (int) Math.min((sequence.size() / divisor) * 255, 255);
+        float brightness = (float) (sequence.size() / divisor);
+        brightness = Math.min(brightness, 1);
 
-        return new Color(gray, gray, gray);
+        if (inverted) {
+            brightness = 1 - brightness;
+        }
+
+        return Color.getHSBColor(0, 0, brightness);
     }
 }

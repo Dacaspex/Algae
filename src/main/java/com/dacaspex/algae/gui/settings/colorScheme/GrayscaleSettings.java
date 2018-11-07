@@ -2,6 +2,7 @@ package com.dacaspex.algae.gui.settings.colorScheme;
 
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.colorScheme.Grayscale;
+import com.dacaspex.propertysheet.property.BooleanProperty;
 import com.dacaspex.propertysheet.property.DoubleProperty;
 import com.dacaspex.propertysheet.property.Property;
 import com.dacaspex.propertysheet.validator.doubleNumber.DoubleValidatorFactory;
@@ -13,6 +14,7 @@ import java.util.List;
 public class GrayscaleSettings implements ColorSchemeSettings {
 
     private DoubleProperty divisorProperty;
+    private BooleanProperty invertedProperty;
 
     public GrayscaleSettings() {
         this.divisorProperty = new DoubleProperty(
@@ -23,17 +25,19 @@ public class GrayscaleSettings implements ColorSchemeSettings {
                         .includeBounds(true, false)
                         .build()
         );
+        this.invertedProperty = new BooleanProperty("Inverted", false);
     }
 
     @Override
     public List<Property> getProperties() {
         return new ArrayList<>(Arrays.asList(
-                divisorProperty
+                divisorProperty,
+                invertedProperty
         ));
     }
 
     @Override
     public ColorScheme getColorScheme() {
-        return new Grayscale(divisorProperty.getValue());
+        return new Grayscale(divisorProperty.getValue(), invertedProperty.getValue());
     }
 }
