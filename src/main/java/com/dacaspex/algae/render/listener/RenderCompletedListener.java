@@ -1,8 +1,8 @@
-package com.dacaspex.algae.render;
+package com.dacaspex.algae.render.listener;
 
 import java.awt.image.BufferedImage;
 
-public interface RenderCompleteListener {
+public interface RenderCompletedListener {
 
     public void onCompleted(BufferedImage image);
 

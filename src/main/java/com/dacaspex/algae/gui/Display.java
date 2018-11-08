@@ -42,9 +42,12 @@ public class Display extends JFrame implements KeyListener {
         this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
 
         // Resize delay timer
-        this.resizeDelayTimer = new Timer(200, e -> render());
+//        this.resizeDelayTimer = new Timer(200, e -> {
+//            render();
+//            resizeDelayTimer.stop();
+//        });
 
-        Application.get().getRenderer().setListener(i -> {
+        Application.get().getRenderer().addListener(i -> {
             image = i;
             repaint();
         });
@@ -52,7 +55,7 @@ public class Display extends JFrame implements KeyListener {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                resizeDelayTimer.restart();
+//                resizeDelayTimer.restart();
             }
         });
         addKeyListener(this);
