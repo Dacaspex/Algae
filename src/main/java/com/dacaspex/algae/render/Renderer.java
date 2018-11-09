@@ -55,12 +55,10 @@ public class Renderer {
 
     public void render(Fractal fractal, ColorScheme colorScheme, Scale scale, RenderSettings renderSettings) {
         // Check, atomically, if there is already a render going on
-        System.out.println("Render request");
         synchronized (this) {
             if (isRendering.get()) {
                 futureRequest = new RenderRequest(fractal, colorScheme, scale, renderSettings);
                 stopRendering.set(true);
-                System.out.println("Postponed render");
 
                 return;
             }
@@ -181,7 +179,6 @@ public class Renderer {
             try {
                 for (Thread t : renderThreads) {
                     t.join();
-                    System.out.println("Thread joined");
                 }
             } catch (InterruptedException e) {
                 // TODO: Exception handling

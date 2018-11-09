@@ -1,11 +1,12 @@
 package com.dacaspex.algae.gui;
 
-import com.dacaspex.algae.fractal.JuliaFractal;
 import com.dacaspex.algae.gui.menu.MenuBar;
 import com.dacaspex.algae.gui.settings.ColorSchemeSettingsDisplay;
+import com.dacaspex.algae.gui.settings.FractalSettingsDisplay;
+import com.dacaspex.algae.gui.settings.colorScheme.AngleGrayscaleSettings;
 import com.dacaspex.algae.gui.settings.colorScheme.GrayscaleSettings;
+import com.dacaspex.algae.gui.settings.fractal.JuliaSettings;
 import com.dacaspex.algae.main.Application;
-import com.dacaspex.algae.math.Complex;
 import com.dacaspex.algae.math.Scale;
 import com.dacaspex.algae.math.Vector2d;
 import com.dacaspex.algae.render.settings.RenderSettings;
@@ -25,6 +26,8 @@ public class Display extends JFrame implements KeyListener {
     private MenuBar menuBar;
 
     private ColorSchemeSettingsDisplay colorSchemeSettingsDisplay;
+    private FractalSettingsDisplay fractalSettingsDisplay;
+
     private BufferedImage image;
     private Scale scale;
 
@@ -39,13 +42,14 @@ public class Display extends JFrame implements KeyListener {
         this.scale = new Scale(new Vector2d(), 0.5, 0.002);
 
         // Settings menus
-        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
+        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new AngleGrayscaleSettings());
+        this.fractalSettingsDisplay = new FractalSettingsDisplay(this, new JuliaSettings());
 
         // Resize delay timer
-//        this.resizeDelayTimer = new Timer(200, e -> {
-//            render();
-//            resizeDelayTimer.stop();
-//        });
+        this.resizeDelayTimer = new Timer(200, e -> {
+            render();
+            resizeDelayTimer.stop();
+        });
 
         Application.get().getRenderer().addListener(i -> {
             image = i;
@@ -55,7 +59,7 @@ public class Display extends JFrame implements KeyListener {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-//                resizeDelayTimer.restart();
+                resizeDelayTimer.restart();
             }
         });
         addKeyListener(this);
@@ -64,12 +68,16 @@ public class Display extends JFrame implements KeyListener {
         render();
     }
 
+    public FractalSettingsDisplay getFractalSettingsDisplay() {
+        return fractalSettingsDisplay;
+    }
+
     public ColorSchemeSettingsDisplay getColorSchemeSettingsDisplay() {
         return colorSchemeSettingsDisplay;
     }
 
     public void openFractalSettings() {
-
+        fractalSettingsDisplay.open();
     }
 
     public void openColorSchemeSettings() {
@@ -78,7 +86,7 @@ public class Display extends JFrame implements KeyListener {
 
     public void render() {
         Application.get().getRenderer().render(
-                new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
+                fractalSettingsDisplay.getSettings().getColorScheme(),
                 colorSchemeSettingsDisplay.getSettings().getColorScheme(),
                 scale,
                 new RenderSettings(panel.getWidth(), panel.getHeight())

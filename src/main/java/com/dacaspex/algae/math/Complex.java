@@ -10,6 +10,10 @@ public class Complex {
         this.imaginary = imaginary;
     }
 
+    public Complex(Vector2d vector) {
+        this(vector.x, vector.y);
+    }
+
     public Complex() {
         this(0, 0);
     }
@@ -104,11 +108,62 @@ public class Complex {
         return new Complex(real, imaginary);
     }
 
+    public Vector2d toVector() {
+        return new Vector2d(real, imaginary);
+    }
+
     @Override
     public String toString() {
         String realSign = real >= 0 ? "" : "-";
         String imaginarySign = imaginary >= 0 ? "+" : "-";
 
         return realSign + real + imaginarySign + imaginary + "i";
+    }
+
+    public static Complex parseComplex(String value) {
+        // TODO: For god sake please refactor this at some point...
+        if (value.chars().filter(ch -> ch == '+').count() + value.chars().filter(ch -> ch == '-').count() > 2) {
+            throw new NumberFormatException();
+        }
+
+        if (value.equals("")) {
+            throw new NumberFormatException();
+        }
+
+        String splitter = "+";
+        double real = Double.NaN;
+        double imaginary = Double.NaN;
+        boolean realIsPositive = true;
+        boolean imaginaryIsPositive = true;
+
+        if (value.subSequence(0, 1).toString().contains("-")) {
+            realIsPositive = false;
+        }
+
+        if (value.substring(1).contains("-")) {
+            splitter = "-";
+            imaginaryIsPositive = false;
+        }
+
+        String[] tokens = value.substring(1).replaceAll(",", ".").split("[" + splitter + "]");
+
+        for (String token : tokens) {
+            if (token.contains("i") && token.indexOf("i") == token.length() - 1) {
+                String parsedToken = (String) token.subSequence(0, token.length() - 1);
+                imaginary = Double.parseDouble(parsedToken);
+            } else {
+                real = Double.parseDouble(token);
+            }
+        }
+
+        if (!realIsPositive) {
+            real = -real;
+        }
+
+        if (!imaginaryIsPositive) {
+            imaginary = -imaginary;
+        }
+
+        return new Complex(real, imaginary);
     }
 }

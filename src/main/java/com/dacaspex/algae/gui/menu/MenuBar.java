@@ -4,6 +4,7 @@ import com.dacaspex.algae.gui.Display;
 import com.dacaspex.algae.gui.menu.item.ColorSchemeSettingsMenuItem;
 import com.dacaspex.algae.gui.menu.item.ExitMenuItem;
 import com.dacaspex.algae.gui.menu.item.OpenColorSchemeSettingsMenuItem;
+import com.dacaspex.algae.gui.menu.item.OpenFractalSettingsMenuItem;
 import com.dacaspex.algae.gui.settings.colorScheme.GrayscaleSettings;
 import com.dacaspex.algae.gui.settings.colorScheme.NormalisedGrayscaleSettings;
 
@@ -27,6 +28,8 @@ public class MenuBar extends JMenuBar {
 
         // Build fractal menu
         JMenu fractalMenu = new JMenu("Fractals");
+        fractalMenu.add(new OpenFractalSettingsMenuItem(display));
+        fractalMenu.addSeparator();
 
         // Build color scheme menu
         JMenu colorSchemeMenu = new JMenu("Color schemes");

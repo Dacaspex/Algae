@@ -46,6 +46,22 @@ public class Vector2d {
 
         return this;
     }
+    
+    public double getAngle() {
+        if (x > 0) {
+            return Math.atan(y / x);
+        } else if (x < 0 && y >= 0) {
+            return Math.atan(y / x) + Math.PI;
+        } else if (x < 0 && y < 0) {
+            return Math.atan(y / x) - Math.PI;
+        } else if (x == 0 && y > 0) {
+            return Math.PI / 2;
+        } else if (x == 0 && y < 0) {
+            return -(Math.PI / 2);
+        } else {
+            return Integer.MAX_VALUE;
+        }
+    }
 
     public Vector2d copy() {
         return new Vector2d(x, y);
