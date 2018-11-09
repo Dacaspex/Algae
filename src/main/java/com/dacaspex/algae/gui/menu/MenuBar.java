@@ -5,8 +5,10 @@ import com.dacaspex.algae.gui.menu.item.ColorSchemeSettingsMenuItem;
 import com.dacaspex.algae.gui.menu.item.ExitMenuItem;
 import com.dacaspex.algae.gui.menu.item.OpenColorSchemeSettingsMenuItem;
 import com.dacaspex.algae.gui.menu.item.OpenFractalSettingsMenuItem;
+import com.dacaspex.algae.gui.settings.colorScheme.AngleGrayscaleSettings;
 import com.dacaspex.algae.gui.settings.colorScheme.GrayscaleSettings;
 import com.dacaspex.algae.gui.settings.colorScheme.NormalisedGrayscaleSettings;
+import com.dacaspex.algae.gui.settings.colorScheme.WaveColorSchemeSettings;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -43,6 +45,16 @@ public class MenuBar extends JMenuBar {
         colorSchemeMenu.add(new ColorSchemeSettingsMenuItem(
                 "Normalised grayscale",
                 new NormalisedGrayscaleSettings(),
+                display
+        ));
+        colorSchemeMenu.add(new ColorSchemeSettingsMenuItem(
+                "Trigonometric",
+                new WaveColorSchemeSettings(),
+                display
+        ));
+        colorSchemeMenu.add(new ColorSchemeSettingsMenuItem(
+                "Angle grayscale",
+                new AngleGrayscaleSettings(),
                 display
         ));
 

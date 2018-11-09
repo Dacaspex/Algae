@@ -42,7 +42,7 @@ public class Display extends JFrame implements KeyListener {
         this.scale = new Scale(new Vector2d(), 0.5, 0.002);
 
         // Settings menus
-        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new AngleGrayscaleSettings());
+        this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
         this.fractalSettingsDisplay = new FractalSettingsDisplay(this, new JuliaSettings());
 
         // Resize delay timer
