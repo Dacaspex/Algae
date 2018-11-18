@@ -1,9 +1,8 @@
 package com.dacaspex.algae.gui.settings;
 
 import com.dacaspex.algae.gui.Display;
-import com.dacaspex.algae.gui.settings.colorScheme.ColorSchemeSettings;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettings;
-import com.dacaspex.algae.gui.settings.util.ComplexEditor;
+import com.dacaspex.algae.gui.settings.util.ComplexCellComponent;
 import com.dacaspex.algae.gui.settings.util.ComplexProperty;
 import com.dacaspex.propertysheet.PropertySheet;
 import com.dacaspex.propertysheet.PropertySheetOptions;
@@ -65,7 +64,7 @@ public class FractalSettingsDisplay extends JFrame implements KeyListener, Prope
 
         for (Property p : settings.getProperties()) {
             if (p instanceof ComplexProperty) {
-                propertySheet.addProperty(p, new ComplexEditor(p, propertySheet));
+                propertySheet.addProperty(p, new ComplexCellComponent((ComplexProperty) p));
             } else {
                 propertySheet.addProperty(p);
             }
