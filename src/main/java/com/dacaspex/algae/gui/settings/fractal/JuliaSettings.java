@@ -48,7 +48,7 @@ public class JuliaSettings implements FractalSettings {
     }
 
     @Override
-    public Fractal getColorScheme() {
+    public Fractal getFractal() {
         return new JuliaFractal(
                 constantProperty.getValue(),
                 maxIterationsProperty.getValue(),

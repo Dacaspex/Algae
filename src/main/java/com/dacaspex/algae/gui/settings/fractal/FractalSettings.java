@@ -9,5 +9,5 @@ public interface FractalSettings {
 
     public List<Property> getProperties();
 
-    public Fractal getColorScheme();
+    public Fractal getFractal();
 }

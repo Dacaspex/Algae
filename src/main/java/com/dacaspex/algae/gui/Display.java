@@ -2,8 +2,8 @@ package com.dacaspex.algae.gui;
 
 import com.dacaspex.algae.gui.menu.MenuBar;
 import com.dacaspex.algae.gui.settings.ColorSchemeSettingsDisplay;
+import com.dacaspex.algae.gui.settings.ExportSettings;
 import com.dacaspex.algae.gui.settings.FractalSettingsDisplay;
-import com.dacaspex.algae.gui.settings.colorScheme.AngleGrayscaleSettings;
 import com.dacaspex.algae.gui.settings.colorScheme.GrayscaleSettings;
 import com.dacaspex.algae.gui.settings.fractal.JuliaSettings;
 import com.dacaspex.algae.main.Application;
@@ -27,6 +27,7 @@ public class Display extends JFrame implements KeyListener {
 
     private ColorSchemeSettingsDisplay colorSchemeSettingsDisplay;
     private FractalSettingsDisplay fractalSettingsDisplay;
+    private ExportSettings exportSettings;
 
     private BufferedImage image;
     private Scale scale;
@@ -44,6 +45,7 @@ public class Display extends JFrame implements KeyListener {
         // Settings menus
         this.colorSchemeSettingsDisplay = new ColorSchemeSettingsDisplay(this, new GrayscaleSettings());
         this.fractalSettingsDisplay = new FractalSettingsDisplay(this, new JuliaSettings());
+        this.exportSettings = new ExportSettings(fractalSettingsDisplay, colorSchemeSettingsDisplay, scale);
 
         // Resize delay timer
         this.resizeDelayTimer = new Timer(200, e -> {
@@ -84,9 +86,13 @@ public class Display extends JFrame implements KeyListener {
         colorSchemeSettingsDisplay.open();
     }
 
+    public void openExportSettings() {
+        exportSettings.open();
+    }
+
     public void render() {
         Application.get().getRenderer().render(
-                fractalSettingsDisplay.getSettings().getColorScheme(),
+                fractalSettingsDisplay.getSettings().getFractal(),
                 colorSchemeSettingsDisplay.getSettings().getColorScheme(),
                 scale,
                 new RenderSettings(panel.getWidth(), panel.getHeight())

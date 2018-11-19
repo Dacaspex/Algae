@@ -7,13 +7,19 @@ public class Application {
     private static Application app;
 
     private Renderer renderer;
+    private Renderer exportRenderer;
 
     private Application() {
         this.renderer = new Renderer();
+        this.exportRenderer = new Renderer();
     }
 
     public Renderer getRenderer() {
         return renderer;
+    }
+
+    public Renderer getExportRenderer() {
+        return exportRenderer;
     }
 
     public void close() {

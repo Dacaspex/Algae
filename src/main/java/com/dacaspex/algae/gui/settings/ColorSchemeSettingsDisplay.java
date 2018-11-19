@@ -94,6 +94,5 @@ public class ColorSchemeSettingsDisplay extends JFrame implements KeyListener, P
 
     @Override
     public void onPropertyAdded(Property property) {
-
     }
 }

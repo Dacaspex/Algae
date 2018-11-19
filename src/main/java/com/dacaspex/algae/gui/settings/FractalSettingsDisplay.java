@@ -100,6 +100,5 @@ public class FractalSettingsDisplay extends JFrame implements KeyListener, Prope
 
     @Override
     public void onPropertyAdded(Property property) {
-
     }
 }
