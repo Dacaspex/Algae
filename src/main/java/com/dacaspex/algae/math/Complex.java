@@ -104,6 +104,20 @@ public class Complex {
         return this;
     }
 
+    public Complex abs() {
+        return new Complex(
+                Math.abs(real),
+                Math.abs(imaginary)
+        );
+    }
+
+    public Complex absi() {
+        real = Math.abs(real);
+        imaginary = Math.abs(imaginary);
+
+        return this;
+    }
+
     public Complex copy() {
         return new Complex(real, imaginary);
     }

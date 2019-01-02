@@ -5,26 +5,25 @@ import com.dacaspex.algae.math.Complex;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JuliaFractal implements Fractal {
+public class MandelbrotFractal implements Fractal {
 
-    private final Complex constant;
     private final int maxIterations;
     private final double escapeValue;
 
-    public JuliaFractal(Complex constant, int maxIterations, double escapeValue) {
-        this.constant = constant;
+    public MandelbrotFractal(int maxIterations, double escapeValue) {
         this.maxIterations = maxIterations;
         this.escapeValue = escapeValue;
     }
 
+    @Override
     public List<Complex> getSequence(Complex c) {
         List<Complex> sequence = new ArrayList<>();
-        sequence.add(c);
+        Complex value = new Complex();
 
-        // Apply the Julia set calculation
-        for (int i = 0; i < maxIterations && c.getModulus() < escapeValue; i++) {
-            c = c.powi(2).addi(constant).copy();
-            sequence.add(c);
+        // Apply mandelbrot set calculation
+        for (int i = 0; i < maxIterations && value.getModulus() < escapeValue; i++) {
+            value = value.powi(2).addi(c).copy();
+            sequence.add(value);
         }
 
         return sequence;
