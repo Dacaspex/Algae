@@ -15,19 +15,21 @@ public class AngleGrayscaleSettings implements ColorSchemeSettings {
 
     private BooleanProperty wrapProperty;
     private BooleanProperty invertedProperty;
+    private BooleanProperty normaliseProperty;
     private SelectionProperty angleTypeProperty;
 
     public AngleGrayscaleSettings() {
         this.wrapProperty = new BooleanProperty("Wrap", false);
         this.invertedProperty = new BooleanProperty("Inverted", false);
+        this.normaliseProperty = new BooleanProperty("Normalise", false);
         this.angleTypeProperty = new SelectionProperty<>(
                 "Angle type",
                 new ArrayList<>(
                         Arrays.asList(
-                                new Item<>(AngleGrayscale.ANGLE_TYPE.LAST, "Last"),
-                                new Item<>(AngleGrayscale.ANGLE_TYPE.AVERAGE, "Average"),
-                                new Item<>(AngleGrayscale.ANGLE_TYPE.MAX, "Maximum"),
-                                new Item<>(AngleGrayscale.ANGLE_TYPE.MIN, "Minimum")
+                                new Item<>(AngleGrayscale.AngleType.LAST, "Last"),
+                                new Item<>(AngleGrayscale.AngleType.AVERAGE, "Average"),
+                                new Item<>(AngleGrayscale.AngleType.MAX, "Maximum"),
+                                new Item<>(AngleGrayscale.AngleType.MIN, "Minimum")
                         )
                 )
         );
@@ -38,6 +40,7 @@ public class AngleGrayscaleSettings implements ColorSchemeSettings {
         return new ArrayList<>(Arrays.asList(
                 invertedProperty,
                 wrapProperty,
+                normaliseProperty,
                 angleTypeProperty
         ));
     }
@@ -47,7 +50,8 @@ public class AngleGrayscaleSettings implements ColorSchemeSettings {
         return new AngleGrayscale(
                 wrapProperty.getValue(),
                 invertedProperty.getValue(),
-                (AngleGrayscale.ANGLE_TYPE) angleTypeProperty.getValue()
+                normaliseProperty.getValue(),
+                (AngleGrayscale.AngleType) angleTypeProperty.getValue()
         );
     }
 }
