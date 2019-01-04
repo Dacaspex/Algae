@@ -3,6 +3,8 @@
 *.iml
 *.png
 
+target/*
+
 # Compiled class file
 *.class
 

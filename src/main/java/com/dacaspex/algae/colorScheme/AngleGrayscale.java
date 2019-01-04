@@ -11,10 +11,12 @@ public class AngleGrayscale implements ColorScheme {
 
     private boolean wrap;
     private boolean inverted;
+    private ANGLE_TYPE angleType;
 
-    public AngleGrayscale(boolean wrap, boolean inverted) {
+    public AngleGrayscale(boolean wrap, boolean inverted, ANGLE_TYPE angleType) {
         this.wrap = wrap;
         this.inverted = inverted;
+        this.angleType = angleType;
     }
 
     @Override
@@ -44,5 +46,12 @@ public class AngleGrayscale implements ColorScheme {
         }
 
         return Color.getHSBColor(0, 0, brightness);
+    }
+
+    public enum ANGLE_TYPE {
+        LAST,
+        AVERAGE,
+        MAX,
+        MIN
     }
 }
