@@ -47,31 +47,27 @@ public class AngleGrayscale implements ColorScheme {
                 break;
         }
 
-//        Vector2d angleVector = sequence.get(sequence.size() - 1).toVector();
-//        // Translate angle from [-PI, PI] -> [0, 2PI]
-//        double angle = angleVector.getAngle() + Math.PI;
-//
-//        if (wrap) {
-//            if (angle <= Math.PI) {
-//                brightness = (float) (angle / Math.PI);
-//            } else {
-//                brightness = 1 - (float) ((angle - Math.PI) / Math.PI);
-//            }
-//        } else {
-//            brightness = (float) (angle / (2 * Math.PI));
-//        }
-//
-//        if (inverted) {
-//            brightness = 1 - brightness;
-//        }
+        // Brightness is the range [0, 1]
+        if (wrap) {
+            // Wrap such that [0, 0.5] -> {0, 1] and (0.5, 1] -> [1, 0]
+            brightness = (brightness <= 0.5) ? 2 * brightness : 2 * (1 - brightness);
+        }
+
+        if (inverted) {
+            brightness = 1 - brightness;
+        }
 
         return Color.getHSBColor(0, 0, (float) brightness);
     }
 
     private double calculateLast(List<Complex> sequence) {
-        double argument = sequence.get(sequence.size() - 1).getArgument();
-
-        return (argument + Math.PI) / (2 * Math.PI);
+        return range(
+                handleNormalise(
+                        sequence.get(sequence.size() - 1).getArgument(),
+                        preProcessor.getMaximumLastArgument(),
+                        preProcessor.getMinimumLastArgument()
+                )
+        );
     }
 
     private double calculateMax(List<Complex> sequence) {
@@ -81,7 +77,13 @@ public class AngleGrayscale implements ColorScheme {
                 .max()
                 .orElse(0);
 
-        return (argument + Math.PI) / (2 * Math.PI);
+        return range(
+                handleNormalise(
+                        argument,
+                        preProcessor.getMaximumMaximumArgument(),
+                        preProcessor.getMinimumMaximumArgument()
+                )
+        );
     }
 
     private double calculateMin(List<Complex> sequence) {
@@ -91,7 +93,13 @@ public class AngleGrayscale implements ColorScheme {
                 .min()
                 .orElse(0);
 
-        return (argument + Math.PI) / (2 * Math.PI);
+        return range(
+                handleNormalise(
+                        argument,
+                        preProcessor.getMaximumMinimumArgument(),
+                        preProcessor.getMinimumMinimumArgument()
+                )
+        );
     }
 
     private double calculateAverage(List<Complex> sequence) {
@@ -101,7 +109,26 @@ public class AngleGrayscale implements ColorScheme {
                 .average()
                 .orElse(0);
 
-        return (argument + Math.PI) / (2 * Math.PI);
+        return range(
+                handleNormalise(
+                        argument,
+                        preProcessor.getMaximumAverageArgument(),
+                        preProcessor.getMinimumAverageArgument()
+                )
+        );
+    }
+
+    private double handleNormalise(double argument, double max, double min) {
+        // Shift range [-pi, pi] -> [0, 2*pi]
+        argument += Math.PI;
+        max += Math.PI;
+        min += Math.PI;
+
+        return normalise ? (argument - min) / (max - min) : argument / (2 * Math.PI);
+    }
+
+    private double range(double brightness) {
+        return Math.max(0d, Math.min(brightness, 1d));
     }
 
     public enum AngleType {
