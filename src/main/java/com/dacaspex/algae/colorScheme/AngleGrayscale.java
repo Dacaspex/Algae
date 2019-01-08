@@ -30,7 +30,6 @@ public class AngleGrayscale implements ColorScheme {
 
     @Override
     public Color getColor(List<Complex> sequence) {
-
         double brightness = 0;
         switch (angleType) {
             case LAST:
@@ -51,10 +50,6 @@ public class AngleGrayscale implements ColorScheme {
         if (wrap) {
             // Wrap such that [0, 0.5] -> {0, 1] and (0.5, 1] -> [1, 0]
             brightness = (brightness <= 0.5) ? 2 * brightness : 2 * (1 - brightness);
-        }
-
-        if (inverted) {
-            brightness = 1 - brightness;
         }
 
         return Color.getHSBColor(0, 0, (float) brightness);

@@ -91,7 +91,7 @@ public class SequenceArgumentPreProcessor implements PreProcessor {
     public double getMinimumMinimumArgument() {
         return minimumMinimumArgument;
     }
-
+  
     @Override
     public void read(Complex input, List<Complex> sequence) {
         entries++;
