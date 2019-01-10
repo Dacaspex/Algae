@@ -74,7 +74,6 @@ public class Display extends JFrame implements KeyListener {
         addKeyListener(this);
 
         build();
-        render();
     }
 
     public FractalSettingsDisplay getFractalSettingsDisplay() {
