@@ -2,6 +2,7 @@ package com.dacaspex.algae.gui.settings;
 
 import com.dacaspex.algae.gui.settings.util.RenderAction;
 import com.dacaspex.algae.math.Scale;
+import com.dacaspex.algae.renderer.Renderer;
 import com.dacaspex.propertysheet.PropertySheet;
 import com.dacaspex.propertysheet.PropertySheetOptions;
 import com.dacaspex.propertysheet.property.ActionProperty;
@@ -9,9 +10,8 @@ import com.dacaspex.propertysheet.property.IntegerProperty;
 import com.dacaspex.propertysheet.property.Property;
 import com.dacaspex.propertysheet.validator.integer.IntegerValidatorFactory;
 
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import java.awt.Dimension;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class ExportSettings extends JFrame {
@@ -49,7 +49,8 @@ public class ExportSettings extends JFrame {
                         colorSchemeSettings,
                         scale,
                         widthProperty,
-                        heightProperty
+                        heightProperty,
+                        new Renderer()
                 )
         );
 

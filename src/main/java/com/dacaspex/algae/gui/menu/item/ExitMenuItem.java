@@ -1,15 +1,11 @@
 package com.dacaspex.algae.gui.menu.item;
 
-import com.dacaspex.algae.main.Application;
-
-import javax.swing.JMenuItem;
+import javax.swing.*;
 
 public class ExitMenuItem extends JMenuItem {
 
     public ExitMenuItem() {
         setText("Exit");
-        addActionListener(e -> {
-            Application.get().close();
-        });
+        addActionListener(e -> System.exit(0));
     }
 }

@@ -6,16 +6,15 @@ import com.dacaspex.algae.gui.settings.ExportSettings;
 import com.dacaspex.algae.gui.settings.FractalSettingsDisplay;
 import com.dacaspex.algae.gui.settings.colorScheme.GrayscaleSettings;
 import com.dacaspex.algae.gui.settings.fractal.JuliaSettings;
-import com.dacaspex.algae.main.Application;
 import com.dacaspex.algae.math.Scale;
 import com.dacaspex.algae.math.Vector2d;
-import com.dacaspex.algae.render.settings.RenderSettings;
+import com.dacaspex.algae.renderer.RenderSettings;
+import com.dacaspex.algae.renderer.Renderer;
+import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
+import com.dacaspex.algae.renderer.event.RendererEventAdapter;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.Timer;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
@@ -31,6 +30,8 @@ public class Display extends JFrame implements KeyListener {
 
     private BufferedImage image;
     private Scale scale;
+
+    private Renderer renderer;
 
     private Timer resizeDelayTimer;
 
@@ -53,10 +54,16 @@ public class Display extends JFrame implements KeyListener {
             resizeDelayTimer.stop();
         });
 
-        Application.get().getRenderer().addListener(i -> {
-            image = i;
-            repaint();
+        this.renderer = new Renderer();
+
+        renderer.addEventListener(new RendererEventAdapter() {
+            @Override
+            public void onRenderCompleted(RenderCompletedEvent event) {
+                image = event.getImage();
+                repaint();
+            }
         });
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -91,7 +98,7 @@ public class Display extends JFrame implements KeyListener {
     }
 
     public void render() {
-        Application.get().getRenderer().render(
+        renderer.render(
                 fractalSettingsDisplay.getSettings().getFractal(),
                 colorSchemeSettingsDisplay.getSettings().getColorScheme(),
                 scale,
@@ -139,7 +146,7 @@ public class Display extends JFrame implements KeyListener {
     public void keyPressed(KeyEvent e) {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_ESCAPE:
-                Application.get().close();
+                System.exit(0);
                 break;
 
             default:

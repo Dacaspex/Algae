@@ -1,23 +1,21 @@
-package com.dacaspex.algae.render.settings;
+package com.dacaspex.algae.renderer;
 
 public class RenderSettings {
 
-    public int width;
-    public int height;
-    public double preProcessorQuality;
-    public double renderQuality;
-    public int threads;
+    public final int width;
+    public final int height;
+    public final double preProcessorQuality;
+    public final double renderQuality;
 
-    public RenderSettings(int width, int height, double preProcessorQuality, double renderQuality, int threads) {
+    public RenderSettings(int width, int height, double preProcessorQuality, double renderQuality) {
         this.width = width;
         this.height = height;
         this.preProcessorQuality = preProcessorQuality;
         this.renderQuality = renderQuality;
-        this.threads = threads;
     }
 
     public RenderSettings(int width, int height) {
-        this(width, height, 0.5, 1, 4);
+        this(width, height, 0.5, 1);
     }
 
     public int getPreProcessorWidth() {
@@ -34,9 +32,5 @@ public class RenderSettings {
 
     public int getRenderHeight() {
         return (int) (renderQuality * height);
-    }
-
-    public int getThreads() {
-        return threads;
     }
 }
