@@ -1,81 +1,83 @@
 package com.dacaspex.algae.gui.menu;
 
-import com.dacaspex.algae.gui.Display;
-import com.dacaspex.algae.gui.menu.item.*;
-import com.dacaspex.algae.gui.settings.colorScheme.AngleGrayscaleSettings;
-import com.dacaspex.algae.gui.settings.colorScheme.GrayscaleSettings;
-import com.dacaspex.algae.gui.settings.colorScheme.NormalisedGrayscaleSettings;
-import com.dacaspex.algae.gui.settings.colorScheme.WaveColorSchemeSettings;
-import com.dacaspex.algae.gui.settings.fractal.BurningShipSettings;
-import com.dacaspex.algae.gui.settings.fractal.JuliaSettings;
-import com.dacaspex.algae.gui.settings.fractal.MandelbrotSettings;
+import com.dacaspex.algae.gui.menu.event.MenuEventDispatcher;
+import com.dacaspex.algae.gui.menu.event.MenuEventListener;
+import com.dacaspex.algae.gui.menu.item.SelectColorSchemeMenuItem;
+import com.dacaspex.algae.gui.menu.item.SelectFractalMenuItem;
+import com.dacaspex.algae.legacyGui.menu.item.ExitMenuItem;
+import com.dacaspex.algae.legacyGui.settings.colorScheme.AngleGrayscaleSettings;
+import com.dacaspex.algae.legacyGui.settings.colorScheme.GrayscaleSettings;
+import com.dacaspex.algae.legacyGui.settings.colorScheme.NormalisedGrayscaleSettings;
+import com.dacaspex.algae.legacyGui.settings.colorScheme.WaveColorSchemeSettings;
+import com.dacaspex.algae.legacyGui.settings.fractal.BurningShipSettings;
+import com.dacaspex.algae.legacyGui.settings.fractal.JuliaSettings;
+import com.dacaspex.algae.legacyGui.settings.fractal.MandelbrotSettings;
 
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
+import javax.swing.*;
 
 public class MenuBar extends JMenuBar {
 
-    private Display display;
+    private final MenuEventDispatcher eventDispatcher;
 
-    public MenuBar(Display display) {
-        this.display = display;
-
-        build();
+    public MenuBar() {
+        this.eventDispatcher = new MenuEventDispatcher();
     }
 
-    private void build() {
-        // Build file menu
+    public void build() {
         JMenu fileMenu = new JMenu("File");
         fileMenu.add(new ExitMenuItem());
-        fileMenu.add(new OpenExportSettingsMenuItem(display));
+        // TODO: Export menu
 
-        // Build fractal menu
         JMenu fractalMenu = new JMenu("Fractals");
-        fractalMenu.add(new OpenFractalSettingsMenuItem(display));
+        // TODO: Open fractal settings
         fractalMenu.addSeparator();
-        fractalMenu.add(new FractalSettingsMenuItem(
-                "Julia set",
-                new JuliaSettings(),
-                display
+        fractalMenu.add(new SelectFractalMenuItem(
+                eventDispatcher,
+                "Julia fractal",
+                new JuliaSettings()
         ));
-        fractalMenu.add(new FractalSettingsMenuItem(
-                "Mandelbrot",
-                new MandelbrotSettings(),
-                display
+        fractalMenu.add(new SelectFractalMenuItem(
+                eventDispatcher,
+                "Mandelbrot fractal",
+                new MandelbrotSettings()
         ));
-        fractalMenu.add(new FractalSettingsMenuItem(
-                "Burning ship",
-                new BurningShipSettings(),
-                display
+        fractalMenu.add(new SelectFractalMenuItem(
+                eventDispatcher,
+                "Burning Ship fractal",
+                new BurningShipSettings()
         ));
 
         // Build color scheme menu
         JMenu colorSchemeMenu = new JMenu("Color schemes");
-        colorSchemeMenu.add(new OpenColorSchemeSettingsMenuItem(display));
+        // TODO: Open color scheme menu
         colorSchemeMenu.addSeparator();
-        colorSchemeMenu.add(new ColorSchemeSettingsMenuItem(
+        colorSchemeMenu.add(new SelectColorSchemeMenuItem(
+                eventDispatcher,
                 "Grayscale",
-                new GrayscaleSettings(),
-                display
+                new GrayscaleSettings()
         ));
-        colorSchemeMenu.add(new ColorSchemeSettingsMenuItem(
+        colorSchemeMenu.add(new SelectColorSchemeMenuItem(
+                eventDispatcher,
                 "Normalised grayscale",
-                new NormalisedGrayscaleSettings(),
-                display
+                new NormalisedGrayscaleSettings()
         ));
-        colorSchemeMenu.add(new ColorSchemeSettingsMenuItem(
+        colorSchemeMenu.add(new SelectColorSchemeMenuItem(
+                eventDispatcher,
                 "Trigonometric",
-                new WaveColorSchemeSettings(),
-                display
+                new WaveColorSchemeSettings()
         ));
-        colorSchemeMenu.add(new ColorSchemeSettingsMenuItem(
+        colorSchemeMenu.add(new SelectColorSchemeMenuItem(
+                eventDispatcher,
                 "Angle grayscale",
-                new AngleGrayscaleSettings(),
-                display
+                new AngleGrayscaleSettings()
         ));
 
         add(fileMenu);
         add(fractalMenu);
         add(colorSchemeMenu);
+    }
+
+    public void addEventListener(MenuEventListener eventListener) {
+        eventDispatcher.addEventListener(eventListener);
     }
 }

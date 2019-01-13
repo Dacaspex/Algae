@@ -1,0 +1,11 @@
+package com.dacaspex.algae.legacyGui.settings.util;
+
+import com.dacaspex.algae.math.Complex;
+import com.dacaspex.propertysheet.property.AbstractProperty;
+
+public class ComplexProperty extends AbstractProperty<Complex> {
+
+    public ComplexProperty(String name, Complex value) {
+        super(name, value, new ComplexValidator());
+    }
+}
