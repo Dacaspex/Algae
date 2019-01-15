@@ -12,4 +12,6 @@ public interface MenuBarEventListener {
     public void onFractalSettingsOpened();
 
     public void onColorSchemeSettingsOpened();
+
+    public void onExportDisplayOpened();
 }

@@ -33,4 +33,8 @@ public class MenuBarEventDispatcher {
     public void dispatchColorSchemeSettingsDisplayOpened() {
         listeners.forEach(MenuBarEventListener::onColorSchemeSettingsOpened);
     }
+
+    public void dispatchExportDisplayOpened() {
+        listeners.forEach(MenuBarEventListener::onExportDisplayOpened);
+    }
 }

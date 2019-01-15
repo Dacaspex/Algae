@@ -3,6 +3,7 @@ package com.dacaspex.algae.gui;
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.fractal.Fractal;
 import com.dacaspex.algae.gui.display.ImageDisplay;
+import com.dacaspex.algae.gui.export.ExportDisplay;
 import com.dacaspex.algae.gui.menu.MenuBar;
 import com.dacaspex.algae.gui.settings.SettingsDisplay;
 import com.dacaspex.algae.gui.settings.SettingsProvider;
@@ -32,6 +33,8 @@ public class Gui extends JFrame {
     private final SettingsDisplay fractalSettingsDisplay;
     private final SettingsDisplay colorSchemeSettingsDisplay;
 
+    private final ExportDisplay exportDisplay;
+
     private Fractal fractal;
     private ColorScheme colorScheme;
     private Scale scale;
@@ -53,6 +56,8 @@ public class Gui extends JFrame {
 
         this.fractalSettingsDisplay = new SettingsDisplay(fractalSettings.get(defaultFractalKey));
         this.colorSchemeSettingsDisplay = new SettingsDisplay(colorSchemeSettings.get(defaultColorSchemeKey));
+
+        this.exportDisplay = new ExportDisplay();
 
         this.fractal = fractalSettings.get(defaultFractalKey).getFractal();
         this.colorScheme = colorSchemeSettings.get(defaultColorSchemeKey).getColorScheme();
@@ -79,6 +84,9 @@ public class Gui extends JFrame {
         fractalSettingsDisplay.addEventListener(new FractalSettingUpdatedListener());
         colorSchemeSettingsDisplay.build();
         colorSchemeSettingsDisplay.addEventListener(new ColorSchemeSettingUpdatedListener());
+
+        // Build export display
+        exportDisplay.build();
 
         // Build menu bar
         menuBar.build();
@@ -125,6 +133,11 @@ public class Gui extends JFrame {
         @Override
         public void onColorSchemeSettingsOpened() {
             colorSchemeSettingsDisplay.open();
+        }
+
+        @Override
+        public void onExportDisplayOpened() {
+            exportDisplay.open(fractal, colorScheme, scale);
         }
     }
 

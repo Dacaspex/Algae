@@ -2,10 +2,7 @@ package com.dacaspex.algae.gui.menu;
 
 import com.dacaspex.algae.gui.menu.event.MenuBarEventDispatcher;
 import com.dacaspex.algae.gui.menu.event.MenuBarEventListener;
-import com.dacaspex.algae.gui.menu.item.OpenColorSchemeSettingsDisplay;
-import com.dacaspex.algae.gui.menu.item.OpenFractalSettingsDisplay;
-import com.dacaspex.algae.gui.menu.item.SelectColorSchemeMenuItem;
-import com.dacaspex.algae.gui.menu.item.SelectFractalMenuItem;
+import com.dacaspex.algae.gui.menu.item.*;
 import com.dacaspex.algae.gui.settings.colorScheme.ColorSchemeSettingsProvider;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
 import com.dacaspex.algae.legacyGui.menu.item.ExitMenuItem;
@@ -31,7 +28,7 @@ public class MenuBar extends JMenuBar {
     public void build() {
         JMenu fileMenu = new JMenu("File");
         fileMenu.add(new ExitMenuItem());
-        // TODO: Export menu
+        fileMenu.add(new OpenExportDisplayMenuItem(eventDispatcher, "Export image"));
 
         JMenu fractalMenu = new JMenu("Fractals");
         fractalMenu.add(new OpenFractalSettingsDisplay(eventDispatcher, "Open fractal settings"));
