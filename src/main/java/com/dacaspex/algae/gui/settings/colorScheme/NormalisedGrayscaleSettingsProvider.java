@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class NormalisedGrayscaleSettings implements ColorSchemeSettings {
+public class NormalisedGrayscaleSettingsProvider implements ColorSchemeSettingsProvider {
 
     private BooleanProperty invertedProperty;
 
-    public NormalisedGrayscaleSettings() {
+    public NormalisedGrayscaleSettingsProvider() {
         this.invertedProperty = new BooleanProperty("Inverted", false);
     }
 

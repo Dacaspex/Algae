@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GrayscaleSettings implements ColorSchemeSettings {
+public class GrayscaleSettingsProvider implements ColorSchemeSettingsProvider {
 
     private DoubleProperty divisorProperty;
     private BooleanProperty invertedProperty;
 
-    public GrayscaleSettings() {
+    public GrayscaleSettingsProvider() {
         this.divisorProperty = new DoubleProperty(
                 "Divisor",
                 512.0,

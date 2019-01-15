@@ -1,9 +1,7 @@
 package com.dacaspex.algae.gui.settings.fractal;
 
 import com.dacaspex.algae.fractal.Fractal;
-import com.dacaspex.algae.fractal.JuliaFractal;
-import com.dacaspex.algae.gui.settings.util.ComplexProperty;
-import com.dacaspex.algae.math.Complex;
+import com.dacaspex.algae.fractal.MandelbrotFractal;
 import com.dacaspex.propertysheet.property.DoubleProperty;
 import com.dacaspex.propertysheet.property.IntegerProperty;
 import com.dacaspex.propertysheet.property.Property;
@@ -14,14 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class JuliaSettings implements FractalSettings {
+public class MandelbrotSettingsProvider implements FractalSettingsProvider {
 
-    private ComplexProperty constantProperty;
-    private IntegerProperty maxIterationsProperty;
-    private DoubleProperty escapeValueProperty;
+    private final IntegerProperty maxIterationsProperty;
+    private final DoubleProperty escapeValueProperty;
 
-    public JuliaSettings() {
-        this.constantProperty = new ComplexProperty("Constant", new Complex(0.285, 0.01));
+    public MandelbrotSettingsProvider() {
         this.maxIterationsProperty = new IntegerProperty(
                 "Maximum iterations",
                 512,
@@ -41,7 +37,6 @@ public class JuliaSettings implements FractalSettings {
     @Override
     public List<Property> getProperties() {
         return new ArrayList<>(Arrays.asList(
-                constantProperty,
                 maxIterationsProperty,
                 escapeValueProperty
         ));
@@ -49,8 +44,7 @@ public class JuliaSettings implements FractalSettings {
 
     @Override
     public Fractal getFractal() {
-        return new JuliaFractal(
-                constantProperty.getValue(),
+        return new MandelbrotFractal(
                 maxIterationsProperty.getValue(),
                 escapeValueProperty.getValue()
         );

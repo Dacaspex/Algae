@@ -1,7 +1,7 @@
 package com.dacaspex.algae.gui.settings.fractal;
 
+import com.dacaspex.algae.fractal.BurningShipFractal;
 import com.dacaspex.algae.fractal.Fractal;
-import com.dacaspex.algae.fractal.MandelbrotFractal;
 import com.dacaspex.propertysheet.property.DoubleProperty;
 import com.dacaspex.propertysheet.property.IntegerProperty;
 import com.dacaspex.propertysheet.property.Property;
@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MandelbrotSettings implements FractalSettings {
+public class BurningShipSettingsProvider implements FractalSettingsProvider {
 
     private final IntegerProperty maxIterationsProperty;
     private final DoubleProperty escapeValueProperty;
 
-    public MandelbrotSettings() {
+    public BurningShipSettingsProvider() {
         this.maxIterationsProperty = new IntegerProperty(
                 "Maximum iterations",
                 512,
@@ -44,7 +44,7 @@ public class MandelbrotSettings implements FractalSettings {
 
     @Override
     public Fractal getFractal() {
-        return new MandelbrotFractal(
+        return new BurningShipFractal(
                 maxIterationsProperty.getValue(),
                 escapeValueProperty.getValue()
         );

@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AngleGrayscaleSettings implements ColorSchemeSettings {
+public class AngleGrayscaleSettingsProvider implements ColorSchemeSettingsProvider {
 
     private BooleanProperty wrapProperty;
     private BooleanProperty invertedProperty;
     private BooleanProperty normaliseProperty;
     private SelectionProperty angleTypeProperty;
 
-    public AngleGrayscaleSettings() {
+    public AngleGrayscaleSettingsProvider() {
         this.wrapProperty = new BooleanProperty("Wrap", false);
         this.invertedProperty = new BooleanProperty("Inverted", false);
         this.normaliseProperty = new BooleanProperty("Normalise", false);

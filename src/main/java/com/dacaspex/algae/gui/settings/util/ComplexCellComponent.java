@@ -4,10 +4,8 @@ import com.dacaspex.algae.math.Complex;
 import com.dacaspex.propertysheet.cell.AbstractCellComponent;
 import com.dacaspex.propertysheet.util.Keys;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import java.awt.Component;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 
 public class ComplexCellComponent extends AbstractCellComponent {

@@ -52,6 +52,10 @@ public class AngleGrayscale implements ColorScheme {
             brightness = (brightness <= 0.5) ? 2 * brightness : 2 * (1 - brightness);
         }
 
+        if (inverted) {
+            brightness = 1 - brightness;
+        }
+
         return Color.getHSBColor(0, 0, (float) brightness);
     }
 

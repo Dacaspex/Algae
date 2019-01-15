@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class WaveColorSchemeSettings implements ColorSchemeSettings {
+public class WaveColorSchemeSettingsProvider implements ColorSchemeSettingsProvider {
 
     private DoubleProperty frequencyRedProperty;
     private DoubleProperty frequencyBlueProperty;
@@ -27,7 +27,7 @@ public class WaveColorSchemeSettings implements ColorSchemeSettings {
     private DoubleProperty deltaBlueProperty;
     private DoubleProperty deltaGreenProperty;
 
-    public WaveColorSchemeSettings() {
+    public WaveColorSchemeSettingsProvider() {
         this.frequencyRedProperty = new DoubleProperty("Frequency red", 0.016);
         this.frequencyGreenProperty = new DoubleProperty("Frequency blue", 0.013);
         this.frequencyBlueProperty = new DoubleProperty("Frequency green", 0.01);
