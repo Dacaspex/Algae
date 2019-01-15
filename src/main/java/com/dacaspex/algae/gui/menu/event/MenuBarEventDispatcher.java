@@ -37,4 +37,8 @@ public class MenuBarEventDispatcher {
     public void dispatchExportDisplayOpened() {
         listeners.forEach(MenuBarEventListener::onExportDisplayOpened);
     }
+
+    public void dispatchExit() {
+        listeners.forEach(MenuBarEventListener::onExit);
+    }
 }

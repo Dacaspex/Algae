@@ -2,7 +2,6 @@ package com.dacaspex.algae.gui.menu.item;
 
 import com.dacaspex.algae.gui.menu.event.MenuBarEventDispatcher;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
-import com.dacaspex.algae.legacyGui.settings.fractal.FractalSettings;
 
 import javax.swing.*;
 

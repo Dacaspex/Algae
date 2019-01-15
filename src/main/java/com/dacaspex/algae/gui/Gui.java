@@ -139,6 +139,11 @@ public class Gui extends JFrame {
         public void onExportDisplayOpened() {
             exportDisplay.open(fractal, colorScheme, scale);
         }
+
+        @Override
+        public void onExit() {
+            System.exit(0);
+        }
     }
 
     private class RendererEventListener extends RendererEventAdapter {

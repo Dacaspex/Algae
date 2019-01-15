@@ -5,7 +5,6 @@ import com.dacaspex.algae.gui.menu.event.MenuBarEventListener;
 import com.dacaspex.algae.gui.menu.item.*;
 import com.dacaspex.algae.gui.settings.colorScheme.ColorSchemeSettingsProvider;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
-import com.dacaspex.algae.legacyGui.menu.item.ExitMenuItem;
 
 import javax.swing.*;
 import java.util.Map;
@@ -27,8 +26,8 @@ public class MenuBar extends JMenuBar {
 
     public void build() {
         JMenu fileMenu = new JMenu("File");
-        fileMenu.add(new ExitMenuItem());
         fileMenu.add(new OpenExportDisplayMenuItem(eventDispatcher, "Export image"));
+        fileMenu.add(new ExitMenuItem(eventDispatcher, "Close application"));
 
         JMenu fractalMenu = new JMenu("Fractals");
         fractalMenu.add(new OpenFractalSettingsDisplay(eventDispatcher, "Open fractal settings"));

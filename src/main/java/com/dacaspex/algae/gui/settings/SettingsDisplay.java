@@ -1,8 +1,8 @@
 package com.dacaspex.algae.gui.settings;
 
 import com.dacaspex.algae.gui.settings.event.SettingUpdatedListener;
-import com.dacaspex.algae.legacyGui.settings.util.ComplexCellComponent;
-import com.dacaspex.algae.legacyGui.settings.util.ComplexProperty;
+import com.dacaspex.algae.gui.settings.util.ComplexCellComponent;
+import com.dacaspex.algae.gui.settings.util.ComplexProperty;
 import com.dacaspex.propertysheet.PropertySheet;
 import com.dacaspex.propertysheet.PropertySheetOptions;
 import com.dacaspex.propertysheet.event.PropertySheetEventAdapter;

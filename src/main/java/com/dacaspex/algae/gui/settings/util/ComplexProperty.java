@@ -1,4 +1,4 @@
-package com.dacaspex.algae.legacyGui.settings.util;
+package com.dacaspex.algae.gui.settings.util;
 
 import com.dacaspex.algae.math.Complex;
 import com.dacaspex.propertysheet.property.AbstractProperty;

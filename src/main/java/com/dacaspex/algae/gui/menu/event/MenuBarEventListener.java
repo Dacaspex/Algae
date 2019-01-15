@@ -14,4 +14,6 @@ public interface MenuBarEventListener {
     public void onColorSchemeSettingsOpened();
 
     public void onExportDisplayOpened();
+
+    public void onExit();
 }
