@@ -65,8 +65,10 @@ public class SettingsDisplay extends JFrame {
         propertySheet.repaint();
     }
 
-    public void setSettingsProvider(SettingsProvider settingsProvider) {
+    public void updateSettingsProvider(SettingsProvider settingsProvider) {
         this.settingsProvider = settingsProvider;
+        update();
+        repaint();
     }
 
     /**

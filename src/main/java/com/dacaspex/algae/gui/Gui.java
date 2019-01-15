@@ -116,12 +116,14 @@ public class Gui extends JFrame {
         @Override
         public void onFractalSettingsSelected(FractalSettingsProvider fractalSettings) {
             fractal = fractalSettings.getFractal();
+            fractalSettingsDisplay.updateSettingsProvider(fractalSettings);
             render();
         }
 
         @Override
         public void onColorSchemeSettingsSelected(ColorSchemeSettingsProvider colorSchemeSettings) {
             colorScheme = colorSchemeSettings.getColorScheme();
+            colorSchemeSettingsDisplay.updateSettingsProvider(colorSchemeSettings);
             render();
         }
 
