@@ -5,6 +5,7 @@ import com.dacaspex.algae.fractal.Fractal;
 import com.dacaspex.algae.gui.display.ImageDisplay;
 import com.dacaspex.algae.gui.menu.MenuBar;
 import com.dacaspex.algae.gui.settings.SettingsDisplay;
+import com.dacaspex.algae.gui.settings.SettingsProvider;
 import com.dacaspex.algae.gui.settings.colorScheme.ColorSchemeSettingsProvider;
 import com.dacaspex.algae.gui.settings.event.SettingUpdatedListener;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
@@ -13,20 +14,15 @@ import com.dacaspex.algae.renderer.RenderSettings;
 import com.dacaspex.algae.renderer.Renderer;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
 import com.dacaspex.algae.renderer.event.RendererEventAdapter;
-import com.dacaspex.propertysheet.property.Property;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
-import java.util.SortedMap;
 
 public class Gui extends JFrame {
 
     private final int width;
     private final int height;
-
-    private final Map<String, FractalSettingsProvider> fractalSettings;
-    private final Map<String, ColorSchemeSettingsProvider> colorSchemeSettings;
 
     private final Renderer renderer;
     private final MenuBar menuBar;
@@ -45,9 +41,6 @@ public class Gui extends JFrame {
             Map<String, FractalSettingsProvider> fractalSettings,
             Map<String, ColorSchemeSettingsProvider> colorSchemeSettings
     ) {
-        this.fractalSettings = fractalSettings;
-        this.colorSchemeSettings = colorSchemeSettings;
-
         this.width = 800;
         this.height = 800;
 
@@ -114,22 +107,24 @@ public class Gui extends JFrame {
     private class MenuBarBarEventListener implements com.dacaspex.algae.gui.menu.event.MenuBarEventListener {
         @Override
         public void onFractalSettingsSelected(FractalSettingsProvider fractalSettings) {
-
+            fractal = fractalSettings.getFractal();
+            render();
         }
 
         @Override
         public void onColorSchemeSettingsSelected(ColorSchemeSettingsProvider colorSchemeSettings) {
-
+            colorScheme = colorSchemeSettings.getColorScheme();
+            render();
         }
 
         @Override
         public void onFractalSettingsOpened() {
-
+            fractalSettingsDisplay.open();
         }
 
         @Override
         public void onColorSchemeSettingsOpened() {
-
+            colorSchemeSettingsDisplay.open();
         }
     }
 
@@ -142,15 +137,23 @@ public class Gui extends JFrame {
 
     private class FractalSettingUpdatedListener implements SettingUpdatedListener {
         @Override
-        public void onSettingUpdated(Property property) {
+        public void onSettingUpdated(SettingsProvider settingsProvider) {
+            if (settingsProvider instanceof FractalSettingsProvider) {
+                fractal = ((FractalSettingsProvider) settingsProvider).getFractal();
+            }
 
+            render();
         }
     }
 
     private class ColorSchemeSettingUpdatedListener implements SettingUpdatedListener {
         @Override
-        public void onSettingUpdated(Property property) {
+        public void onSettingUpdated(SettingsProvider settingsProvider) {
+            if (settingsProvider instanceof ColorSchemeSettingsProvider) {
+                colorScheme = ((ColorSchemeSettingsProvider) settingsProvider).getColorScheme();
+            }
 
+            render();
         }
     }
 }

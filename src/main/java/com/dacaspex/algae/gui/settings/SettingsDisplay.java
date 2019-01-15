@@ -76,7 +76,7 @@ public class SettingsDisplay extends JFrame {
     private class PropertySheetEventListener extends PropertySheetEventAdapter {
         @Override
         public void onPropertyUpdated(Property property) {
-            listeners.forEach(l -> l.onSettingUpdated(property));
+            listeners.forEach(l -> l.onSettingUpdated(settingsProvider));
         }
     }
 }

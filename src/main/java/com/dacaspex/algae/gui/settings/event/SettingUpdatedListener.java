@@ -1,8 +1,8 @@
 package com.dacaspex.algae.gui.settings.event;
 
-import com.dacaspex.propertysheet.property.Property;
+import com.dacaspex.algae.gui.settings.SettingsProvider;
 
 public interface SettingUpdatedListener {
 
-    public void onSettingUpdated(Property property);
+    public void onSettingUpdated(SettingsProvider settingsProvider);
 }
