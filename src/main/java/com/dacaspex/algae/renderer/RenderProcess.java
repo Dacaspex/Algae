@@ -29,6 +29,9 @@ public class RenderProcess extends Thread {
     private TaskQueue taskQueue;
     private ImageCollector collector;
 
+    private int preProcessingProgressUnits;
+    private int renderingProgressUnits;
+
     public RenderProcess(
             Fractal fractal,
             ColorScheme colorScheme,
@@ -45,18 +48,25 @@ public class RenderProcess extends Thread {
         this.threadCount = threadCount;
         this.eventDispatcher = eventDispatcher;
         this.collector = new ImageCollector();
+
+        this.preProcessingProgressUnits = (int) ((100 * renderSettings.preProcessorQuality)
+                / (renderSettings.preProcessorQuality + renderSettings.renderQuality));
+        this.renderingProgressUnits = (int) ((100 * renderSettings.renderQuality)
+                / (renderSettings.preProcessorQuality + renderSettings.renderQuality));
     }
 
     @Override
     public void run() {
         try {
             // Startup tasks
-            eventDispatcher.dispatchOnRenderStartedEvent(new RenderEvent(id));
+            eventDispatcher.dispatchOnRenderStartedEvent(new RenderEvent(id, RenderStage.BUILDING_TASKS, 0));
             buildTaskQueue();
 
             // Pre-process the image
             preProcess();
-            eventDispatcher.dispatchOnPreProcessingCompleted(new RenderEvent(id));
+
+            // Calculate the progress thus far
+            eventDispatcher.dispatchOnPreProcessingCompleted(new RenderEvent(id, RenderStage.RENDERING, preProcessingProgressUnits));
 
             // Actually render the image
             render();
@@ -82,7 +92,7 @@ public class RenderProcess extends Thread {
             // Ugly, but it works... Not working a lot with threads so bare with me.
 
             // Throw the appropriate event so the caller knows it has been stopped.
-            eventDispatcher.dispatchOnRenderCanceledEvent(new RenderEvent(id));
+            eventDispatcher.dispatchOnRenderCanceledEvent(new RenderEvent(id, RenderStage.COMPLETED, 0));
         }
     }
 
@@ -119,11 +129,22 @@ public class RenderProcess extends Thread {
                 renderSettings.getPreProcessorHeight()
         );
 
+        // Progress calculation
+        double progress;
+        int index = 0;
+
         for (Vector2d[] row : points) {
             if (isInterrupted()) {
                 // See exception handler in this class for explanation
                 throw new InterruptedException();
             }
+
+            // Calculate progress
+            index++;
+            progress = ((double) index / points.length);
+            progress = progress * preProcessingProgressUnits;
+
+            eventDispatcher.dispatchOnProgressEvent(new RenderEvent(id, RenderStage.PRE_PROCESSING, (int) progress));
 
             for (Vector2d point : row) {
                 // Construct complex from point
@@ -138,17 +159,25 @@ public class RenderProcess extends Thread {
     private void render() throws InterruptedException {
         List<Thread> threads = new ArrayList<>();
         Vector2d[][] points = scale.getPoints(renderSettings.getRenderWidth(), renderSettings.getRenderHeight());
+        int initialTaskSize = taskQueue.size();
+        double progress = 0;
 
         for (int i = 0; i < threadCount; i++) {
             threads.add(new Thread(new RenderThread(fractal, colorScheme, points, taskQueue, collector)));
         }
 
-        // Start each thread
+        // Start each thsread
         threads.forEach(Thread::start);
 
-        // Wait for each thread to conclude
-        for (Thread thread : threads) {
-            thread.join();
+        while (threads.stream().anyMatch(Thread::isAlive)) {
+            for (Thread t : threads) {
+                t.join(10);
+
+                // Dispatch a progress event
+                progress = (double) (initialTaskSize - taskQueue.size()) / initialTaskSize;
+                progress = progress * renderingProgressUnits + preProcessingProgressUnits;
+                eventDispatcher.dispatchOnProgressEvent(new RenderEvent(id, RenderStage.RENDERING, (int) progress));
+            }
         }
     }
 

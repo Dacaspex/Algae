@@ -20,4 +20,14 @@ public class RendererEventAdapter implements RendererEventListener {
     public void onRenderCompleted(RenderCompletedEvent event) {
 
     }
+
+    @Override
+    public void onProgress(RenderEvent event) {
+
+    }
+
+    @Override
+    public void onGenericEvent(RenderEvent event) {
+
+    }
 }

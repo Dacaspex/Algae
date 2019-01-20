@@ -29,15 +29,22 @@ public class Renderer {
             activeProcess.interrupt();
         }
 
-        activeProcess = new RenderProcess(fractal, colorScheme, scale, renderSettings, 16, eventDispatcher);
+        activeProcess = new RenderProcess(fractal, colorScheme, scale, renderSettings, 2, eventDispatcher);
         activeProcess.start();
+    }
+
+    /**
+     * Cancels the currently active render asynchronously. Note that when this method returns, the render
+     * may not have been canceled yet. Use the event listener to get the exact time when the render is
+     * canceled.
+     */
+    public void cancel() {
+        if (activeProcess != null) {
+            activeProcess.interrupt();
+        }
     }
 
     public void addEventListener(RendererEventListener eventListener) {
         eventDispatcher.addEventListener(eventListener);
-    }
-
-    public void removeEventListener(RendererEventListener eventListener) {
-        eventDispatcher.removeEventListener(eventListener);
     }
 }

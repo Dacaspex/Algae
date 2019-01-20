@@ -10,10 +10,12 @@ import com.dacaspex.algae.gui.settings.SettingsProvider;
 import com.dacaspex.algae.gui.settings.colorScheme.ColorSchemeSettingsProvider;
 import com.dacaspex.algae.gui.settings.event.SettingUpdatedListener;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
+import com.dacaspex.algae.gui.status.StatusBar;
 import com.dacaspex.algae.math.Scale;
 import com.dacaspex.algae.renderer.RenderSettings;
 import com.dacaspex.algae.renderer.Renderer;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
+import com.dacaspex.algae.renderer.event.RenderEvent;
 import com.dacaspex.algae.renderer.event.RendererEventAdapter;
 
 import javax.swing.*;
@@ -34,6 +36,8 @@ public class Gui extends JFrame {
     private final SettingsDisplay colorSchemeSettingsDisplay;
 
     private final ExportDisplay exportDisplay;
+
+    private boolean exited;
 
     private Fractal fractal;
     private ColorScheme colorScheme;
@@ -64,6 +68,8 @@ public class Gui extends JFrame {
         this.scale = new Scale();
         // Render settings are intentionally not initialised now, since it requires the dimensions of the
         // image display.
+
+        this.exited = false;
 
         this.renderer = new Renderer();
         this.menuBar = new MenuBar(fractalSettings, colorSchemeSettings);
@@ -144,7 +150,9 @@ public class Gui extends JFrame {
 
         @Override
         public void onExit() {
-            System.exit(0);
+            // Wait for the render to cancel for graceful termination
+            exited = true;
+            renderer.cancel();
         }
     }
 
@@ -152,6 +160,19 @@ public class Gui extends JFrame {
         @Override
         public void onRenderCompleted(RenderCompletedEvent event) {
             imageDisplay.updateImage(event.getImage());
+        }
+
+        @Override
+        public void onRenderCanceled(RenderEvent event) {
+            if (exited) {
+                System.exit(0);
+            }
+        }
+
+        @Override
+        public void onGenericEvent(RenderEvent event) {
+            statusBar.updateProgress(event.getProgress());
+            statusBar.updateRenderStage(event.getRenderStage());
         }
     }
 

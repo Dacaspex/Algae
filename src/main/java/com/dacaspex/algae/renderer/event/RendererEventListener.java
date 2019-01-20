@@ -9,4 +9,8 @@ public interface RendererEventListener {
     public void onPreProcessingCompleted(RenderEvent event);
 
     public void onRenderCompleted(RenderCompletedEvent event);
+
+    public void onProgress(RenderEvent event);
+
+    public void onGenericEvent(RenderEvent event);
 }

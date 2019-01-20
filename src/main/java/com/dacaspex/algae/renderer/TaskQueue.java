@@ -21,4 +21,8 @@ public class TaskQueue {
     public synchronized void clear() {
         tasks.clear();
     }
+
+    public synchronized int size() {
+        return tasks.size();
+    }
 }
