@@ -49,10 +49,7 @@ public class RenderProcess extends Thread {
         this.eventDispatcher = eventDispatcher;
         this.collector = new ImageCollector();
 
-        this.preProcessingProgressUnits = (int) ((100 * renderSettings.preProcessorQuality)
-                / (renderSettings.preProcessorQuality + renderSettings.renderQuality));
-        this.renderingProgressUnits = (int) ((100 * renderSettings.renderQuality)
-                / (renderSettings.preProcessorQuality + renderSettings.renderQuality));
+        calculateProgressUnits();
     }
 
     @Override
@@ -197,6 +194,18 @@ public class RenderProcess extends Thread {
         }
 
         return image;
+    }
+
+    private void calculateProgressUnits() {
+        if (colorScheme.getPreProcessor() == null) {
+            preProcessingProgressUnits = 0;
+            renderingProgressUnits = 100;
+        } else {
+            preProcessingProgressUnits = (int) ((100 * renderSettings.preProcessorQuality)
+                    / (renderSettings.preProcessorQuality + renderSettings.renderQuality));
+            renderingProgressUnits = (int) ((100 * renderSettings.renderQuality)
+                    / (renderSettings.preProcessorQuality + renderSettings.renderQuality));
+        }
     }
 
     @Override
