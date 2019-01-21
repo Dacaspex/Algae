@@ -12,6 +12,7 @@ import com.dacaspex.algae.gui.settings.event.SettingUpdatedListener;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
 import com.dacaspex.algae.gui.status.StatusBar;
 import com.dacaspex.algae.math.Scale;
+import com.dacaspex.algae.math.Vector2d;
 import com.dacaspex.algae.renderer.RenderSettings;
 import com.dacaspex.algae.renderer.Renderer;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
@@ -101,6 +102,7 @@ public class Gui extends JFrame {
 
         // Build image display
         imageDisplay.build();
+        imageDisplay.addEventListener(new ImageDisplayEventListener());
         add(imageDisplay, BorderLayout.CENTER);
 
         // Build status bar
@@ -193,6 +195,32 @@ public class Gui extends JFrame {
             if (settingsProvider instanceof ColorSchemeSettingsProvider) {
                 colorScheme = ((ColorSchemeSettingsProvider) settingsProvider).getColorScheme();
             }
+
+            render();
+        }
+    }
+
+    private class ImageDisplayEventListener implements com.dacaspex.algae.gui.display.event.ImageDisplayEventListener {
+        @Override
+        public void onZoomIn(Vector2d point) {
+            Vector2d center = scale.getScreenPointInScale(point, imageDisplay.getWidth(), imageDisplay.getHeight());
+            scale = new Scale(center, scale.getZoomLevel() * 2);
+
+            render();
+        }
+
+        @Override
+        public void onZoomOut(Vector2d point) {
+            Vector2d center = scale.getScreenPointInScale(point, imageDisplay.getWidth(), imageDisplay.getHeight());
+            scale = new Scale(center, scale.getZoomLevel() / 2);
+
+            render();
+        }
+
+        @Override
+        public void onTranslate(Vector2d point) {
+            Vector2d center = scale.getScreenPointInScale(point, imageDisplay.getWidth(), imageDisplay.getHeight());
+            scale = new Scale(center, scale.getZoomLevel());
 
             render();
         }

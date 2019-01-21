@@ -166,7 +166,7 @@ public class RenderProcess extends Thread {
             threads.add(new Thread(new RenderThread(fractal, colorScheme, points, taskQueue, collector)));
         }
 
-        // Start each thsread
+        // Start each thread
         threads.forEach(Thread::start);
 
         while (threads.stream().anyMatch(Thread::isAlive)) {

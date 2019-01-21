@@ -11,8 +11,6 @@ public class StatusBar extends JPanel {
     private final JLabel statusLabel;
     private final JProgressBar progressBar;
 
-    private RenderStage renderStage;
-
     public StatusBar() {
         this.statusLabel = new JLabel();
         this.progressBar = new JProgressBar();
@@ -36,7 +34,6 @@ public class StatusBar extends JPanel {
     }
 
     public void updateRenderStage(RenderStage renderStage) {
-        this.renderStage = renderStage;
         progressBar.setString(renderStage.toString());
     }
 

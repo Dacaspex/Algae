@@ -15,9 +15,12 @@ public class ImageDisplay extends JPanel {
     private BufferedImage image;
     private ImageDisplayEventDispatcher eventDispatcher;
 
+    public ImageDisplay() {
+        this.eventDispatcher = new ImageDisplayEventDispatcher();
+    }
+
     public void updateImage(BufferedImage image) {
         this.image = image;
-        this.eventDispatcher = new ImageDisplayEventDispatcher();
 
         repaint();
     }

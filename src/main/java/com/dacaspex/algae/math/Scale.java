@@ -13,8 +13,8 @@ public class Scale {
         this.yDensity = yDensity;
     }
 
-    public Scale(Vector2d center, double zoomLevel, double density) {
-        this(center, zoomLevel, density, density);
+    public Scale(Vector2d center, double zoomLevel) {
+        this(center, zoomLevel, 0.002, 0.002);
     }
 
     public Scale(Vector2d center) {
