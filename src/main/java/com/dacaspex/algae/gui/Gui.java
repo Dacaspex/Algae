@@ -21,6 +21,8 @@ import com.dacaspex.algae.renderer.event.RendererEventAdapter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Map;
 
 public class Gui extends JFrame {
@@ -44,6 +46,8 @@ public class Gui extends JFrame {
     private ColorScheme colorScheme;
     private Scale scale;
     private RenderSettings renderSettings;
+
+    private Timer resizeTimer;
 
     public Gui(
             Map<String, FractalSettingsProvider> fractalSettings,
@@ -76,6 +80,12 @@ public class Gui extends JFrame {
         this.menuBar = new MenuBar(fractalSettings, colorSchemeSettings);
         this.imageDisplay = new ImageDisplay();
         this.statusBar = new StatusBar();
+
+        this.resizeTimer = new Timer(200, event -> {
+            resizeTimer.stop();
+            renderSettings = new RenderSettings(imageDisplay.getWidth(), imageDisplay.getHeight());
+            render();
+        });
     }
 
     public void build() {
@@ -109,8 +119,10 @@ public class Gui extends JFrame {
         statusBar.build();
         add(statusBar, BorderLayout.SOUTH);
 
+        // Build gui
         setVisible(true);
         pack();
+        addComponentListener(new ComponentListener());
 
         renderSettings = new RenderSettings(imageDisplay.getWidth(), imageDisplay.getHeight());
         render();
@@ -223,6 +235,13 @@ public class Gui extends JFrame {
             scale = new Scale(center, scale.getZoomLevel());
 
             render();
+        }
+    }
+
+    private class ComponentListener extends ComponentAdapter {
+        @Override
+        public void componentResized(ComponentEvent e) {
+            resizeTimer.restart();
         }
     }
 }

@@ -157,7 +157,7 @@ public class RenderProcess extends Thread {
         List<Thread> threads = new ArrayList<>();
         Vector2d[][] points = scale.getPoints(renderSettings.getRenderWidth(), renderSettings.getRenderHeight());
         int initialTaskSize = taskQueue.size();
-        double progress = 0;
+        double progress;
 
         for (int i = 0; i < threadCount; i++) {
             threads.add(new Thread(new RenderThread(fractal, colorScheme, points, taskQueue, collector)));
