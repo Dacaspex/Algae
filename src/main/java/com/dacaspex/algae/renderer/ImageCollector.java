@@ -1,6 +1,6 @@
 package com.dacaspex.algae.renderer;
 
-import javafx.util.Pair;
+import com.dacaspex.algae.uitl.Pair;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
