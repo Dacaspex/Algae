@@ -7,20 +7,9 @@ import com.dacaspex.algae.renderer.RenderSettings;
 import com.dacaspex.algae.renderer.Renderer;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
 import com.dacaspex.algae.renderer.event.RendererEventAdapter;
-import com.dacaspex.propertysheet.PropertySheet;
-import com.dacaspex.propertysheet.PropertySheetOptions;
-import com.dacaspex.propertysheet.action.Action;
-import com.dacaspex.propertysheet.property.ActionProperty;
-import com.dacaspex.propertysheet.property.IntegerProperty;
-import com.dacaspex.propertysheet.validator.integer.IntegerValidatorFactory;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.awt.*;
 
 /**
  * This is an experimental, first, take on the export GUI. I do want to create a custom UI in the future,
@@ -28,52 +17,99 @@ import java.util.Date;
  */
 public class ExportDisplay extends JFrame {
 
-    private final Renderer renderer;
+    private final int width;
+    private final int height;
 
-    private final PropertySheet propertySheet;
-    private final IntegerProperty widthProperty;
-    private final IntegerProperty heightProperty;
-    private final ActionProperty renderAction;
+    private final Renderer renderer;
+    private final Renderer previewRenderer;
 
     private Fractal fractal;
     private ColorScheme colorScheme;
     private Scale scale;
+    private RenderSettings renderSettings;
+
+    /* GUI Components */
+    private PreviewPanel previewPanel;
 
     public ExportDisplay() {
+        this.width = 800;
+        this.height = 400;
         this.renderer = new Renderer();
-
-        this.propertySheet = new PropertySheet(new PropertySheetOptions());
-        this.widthProperty = new IntegerProperty(
-                "Width",
-                1920,
-                new IntegerValidatorFactory()
-                        .setLowerBound(0)
-                        .build()
-        );
-        this.heightProperty = new IntegerProperty(
-                "Height",
-                1080,
-                new IntegerValidatorFactory()
-                        .setLowerBound(0)
-                        .build()
-        );
-        this.renderAction = new ActionProperty("Render", new RenderAction());
+        this.previewRenderer = new Renderer();
+        this.renderSettings = new RenderSettings(1920, 1080, 1, 1);
     }
 
     public void build() {
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // TEMP
+        setPreferredSize(new Dimension(width, height));
+        setTitle("Export as image");
 
-        // Build property sheet
-        propertySheet.addProperty(widthProperty);
-        propertySheet.addProperty(heightProperty);
-        propertySheet.addProperty(renderAction);
+        // Create panels
+        JPanel settingsPanel = new JPanel();
+        JPanel generalSettingsPanel = new JPanel();
+        JPanel actionsPanel = new JPanel();
 
-        add(new JScrollPane(propertySheet));
+        // Preview panel
+        previewPanel = new PreviewPanel(new Dimension(400, height));
+        previewPanel.build();
 
-        // TODO: Key listener for closing
+        // General settings panel
+        JLabel widthLabel = new JLabel("Width");
+        JLabel heightLabel = new JLabel("Height");
+        JTextField widthInput = new JTextField();
+        JTextField heightInput = new JTextField();
 
-        setVisible(false);
+        generalSettingsPanel.setBorder(BorderFactory.createTitledBorder("General settings"));
+
+        widthInput.setBorder(BorderFactory.createCompoundBorder(
+                widthInput.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        heightInput.setBorder(BorderFactory.createCompoundBorder(
+                heightInput.getBorder(),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+
+        // Layout of general settings panel
+        GroupLayout layout = new GroupLayout(generalSettingsPanel);
+        generalSettingsPanel.setLayout(layout);
+        layout.setAutoCreateGaps(true);
+        layout.setAutoCreateContainerGaps(true);
+
+        layout.setHorizontalGroup(
+                layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(widthLabel)
+                                .addComponent(heightLabel))
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addComponent(widthInput)
+                                .addComponent(heightInput))
+        );
+        layout.setVerticalGroup(
+                layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(widthLabel)
+                                .addComponent(widthInput))
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(heightLabel)
+                                .addComponent(heightInput))
+        );
+
+        // Action panel
+        JButton renderButton = new JButton("Render");
+        actionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
+        actionsPanel.add(renderButton);
+
+        // Build layout for gui
+        setLayout(new BorderLayout());
+        settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.PAGE_AXIS));
+        settingsPanel.add(generalSettingsPanel);
+        settingsPanel.add(actionsPanel);
+        add(settingsPanel, BorderLayout.CENTER);
+        add(previewPanel, BorderLayout.EAST);
+
         pack();
+        setVisible(false);
 
         renderer.addEventListener(new RendererEventListener());
     }
@@ -83,37 +119,25 @@ public class ExportDisplay extends JFrame {
         this.colorScheme = colorScheme;
         this.scale = scale;
         setVisible(true);
+
+        previewPanel.loadPreview(fractal, colorScheme, scale, renderSettings);
     }
 
     public void close() {
         setVisible(false);
     }
 
-    private class RenderAction implements Action {
-        @Override
-        public void execute() {
-            RenderSettings renderSettings = new RenderSettings(
-                    widthProperty.getValue(),
-                    heightProperty.getValue(),
-                    1,
-                    1
-            );
-
-            renderer.render(fractal, colorScheme, scale, renderSettings);
-        }
-    }
-
     private class RendererEventListener extends RendererEventAdapter {
         @Override
         public void onRenderCompleted(RenderCompletedEvent event) {
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd--HH-mm-ss");
-            Date date = new Date();
-            String fileName = "export-" + dateFormat.format(date) + ".png";
-            try {
-                ImageIO.write(event.getImage(), "png", new File(fileName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+        }
+    }
+
+    private class PreviewRendererEventListener extends RendererEventAdapter {
+        @Override
+        public void onRenderCompleted(RenderCompletedEvent event) {
+
         }
     }
 }
