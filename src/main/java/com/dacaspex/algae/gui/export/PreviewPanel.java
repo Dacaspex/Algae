@@ -19,6 +19,7 @@ public class PreviewPanel extends JPanel {
 
     private final Dimension dimension;
     private final JLabel previewText;
+    private final Canvas canvas;
 
     private BufferedImage preview;
 
@@ -26,38 +27,20 @@ public class PreviewPanel extends JPanel {
         this.renderer = new Renderer();
         this.dimension = dimension;
         this.previewText = new JLabel("Loading preview...");
+        this.canvas = new Canvas();
         this.preview = null;
     }
 
     public void build() {
         setPreferredSize(dimension);
         setBorder(BorderFactory.createTitledBorder("Preview"));
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
 
-        add(previewText);
+        add(canvas);
+        canvas.setLayout(new GridBagLayout());
+        canvas.add(previewText);
 
         renderer.addEventListener(new RendererEventListener());
-    }
-
-    @Override
-    public void paint(Graphics graphics) {
-        super.paint(graphics);
-
-        if (preview != null) {
-            // Center image
-            int x = 0;
-            int y = 0;
-
-            if (preview.getWidth() < getWidth()) {
-                x = (int) (0.5 * getWidth() - 0.5 * preview.getWidth());
-            }
-
-            if (preview.getHeight() < getHeight()) {
-                y = (int) (0.5 * getHeight() - 0.5 * preview.getHeight());
-            }
-
-            graphics.drawImage(preview, x, y, null);
-        }
     }
 
     public void loadPreview(Fractal fractal, ColorScheme colorScheme, Scale scale, RenderSettings renderSettings) {
@@ -88,14 +71,37 @@ public class PreviewPanel extends JPanel {
         public void onRenderStarted(RenderEvent event) {
             previewText.setVisible(true);
             preview = null;
-            repaint();
+            canvas.repaint();
         }
 
         @Override
         public void onRenderCompleted(RenderCompletedEvent event) {
             previewText.setVisible(false);
             preview = event.getImage();
-            repaint();
+            canvas.repaint();
+        }
+    }
+
+    private class Canvas extends JPanel {
+        @Override
+        public void paint(Graphics graphics) {
+            super.paint(graphics);
+
+            if (preview != null) {
+                // Center image
+                int x = 0;
+                int y = 0;
+
+                if (preview.getWidth() < getWidth()) {
+                    x = (int) (0.5 * getWidth() - 0.5 * preview.getWidth());
+                }
+
+                if (preview.getHeight() < getHeight()) {
+                    y = (int) (0.5 * getHeight() - 0.5 * preview.getHeight());
+                }
+
+                graphics.drawImage(preview, x, y, null);
+            }
         }
     }
 }
