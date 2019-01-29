@@ -13,7 +13,6 @@ import java.util.Map;
 public class Launcher {
 
     public static void main(String[] args) {
-
         // We use a {@code LinkedHashMap} for this implementation to make sure the order is the same
         // everywhere as the insertion order.
         Map<String, FractalSettingsProvider> fractalSettings = new LinkedHashMap<String, FractalSettingsProvider>() {{
