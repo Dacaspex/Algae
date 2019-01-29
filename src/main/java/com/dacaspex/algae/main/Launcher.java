@@ -22,7 +22,7 @@ public class Launcher {
         ExportDisplay ed = new ExportDisplay();
         ed.build();
         ed.open(
-                new JuliaFractal(new Complex(0.5, 0.5), 512, 2.0),
+                new JuliaFractal(new Complex(0.285, 0.01), 512, 2.0),
                 new Grayscale(512, false),
                 new Scale()
         );

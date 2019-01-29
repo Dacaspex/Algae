@@ -44,16 +44,42 @@ public class PreviewPanel extends JPanel {
         super.paint(graphics);
 
         if (preview != null) {
-            graphics.drawImage(preview, 0, 0, null);
+            // Center image
+            int x = 0;
+            int y = 0;
+
+            if (preview.getWidth() < getWidth()) {
+                x = (int) (0.5 * getWidth() - 0.5 * preview.getWidth());
+            }
+
+            if (preview.getHeight() < getHeight()) {
+                y = (int) (0.5 * getHeight() - 0.5 * preview.getHeight());
+            }
+
+            graphics.drawImage(preview, x, y, null);
         }
     }
 
-    public void loadPreview(
-            Fractal fractal,
-            ColorScheme colorScheme,
-            Scale scale,
-            RenderSettings renderSettings
-    ) {
+    public void loadPreview(Fractal fractal, ColorScheme colorScheme, Scale scale, RenderSettings renderSettings) {
+        // Adjust size for preview
+        int width = renderSettings.width;
+        int height = renderSettings.height;
+
+        if (width > getWidth()) {
+            float ratio = (float) getWidth() / width;
+            width = (int) (width * ratio);
+            height = (int) (height * ratio);
+        }
+
+        if (height > getHeight()) {
+            float ratio = (float) getHeight() / height;
+            width = (int) (width * ratio);
+            height = (int) (height * ratio);
+        }
+
+        // Create new render settings
+        renderSettings = new RenderSettings(width, height, 0.5, 1);
+
         renderer.render(fractal, colorScheme, scale, renderSettings);
     }
 

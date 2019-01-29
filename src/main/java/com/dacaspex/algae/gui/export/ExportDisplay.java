@@ -10,6 +10,9 @@ import com.dacaspex.algae.renderer.event.RendererEventAdapter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
 
 /**
  * This is an experimental, first, take on the export GUI. I do want to create a custom UI in the future,
@@ -17,47 +20,66 @@ import java.awt.*;
  */
 public class ExportDisplay extends JFrame {
 
-    private final int width;
-    private final int height;
+    private final int displayWidth;
+    private final int displayHeight;
 
     private final Renderer renderer;
-    private final Renderer previewRenderer;
+
+    private final ReloadPreviewListener reloadPreviewListener;
+
+    /* Defaults for form fields */
+    private final int defaultWidth;
+    private final int defaultHeight;
 
     private Fractal fractal;
     private ColorScheme colorScheme;
     private Scale scale;
-    private RenderSettings renderSettings;
+    private File saveLocation;
 
     /* GUI Components */
     private PreviewPanel previewPanel;
+    private JTextField widthInput;
+    private JTextField heightInput;
+    private JFileChooser fileChooser;
+    private JLabel saveLocationLabel;
 
     public ExportDisplay() {
-        this.width = 800;
-        this.height = 400;
+        this.displayWidth = 800;
+        this.displayHeight = 400;
+        this.defaultWidth = 1920;
+        this.defaultHeight = 1080;
         this.renderer = new Renderer();
-        this.previewRenderer = new Renderer();
-        this.renderSettings = new RenderSettings(1920, 1080, 1, 1);
+        this.reloadPreviewListener = new ReloadPreviewListener();
     }
 
     public void build() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // TEMP
-        setPreferredSize(new Dimension(width, height));
+        setPreferredSize(new Dimension(displayWidth, displayHeight));
         setTitle("Export as image");
 
-        // Create panels
-        JPanel settingsPanel = new JPanel();
-        JPanel generalSettingsPanel = new JPanel();
-        JPanel actionsPanel = new JPanel();
-
         // Preview panel
-        previewPanel = new PreviewPanel(new Dimension(400, height));
+        previewPanel = new PreviewPanel(new Dimension(400, displayHeight));
         previewPanel.build();
 
         // General settings panel
+        JPanel generalSettingsPanel = new JPanel();
         JLabel widthLabel = new JLabel("Width");
         JLabel heightLabel = new JLabel("Height");
-        JTextField widthInput = new JTextField();
-        JTextField heightInput = new JTextField();
+        widthInput = new JTextField(Integer.toString(defaultWidth));
+        widthInput.addActionListener(reloadPreviewListener);
+        heightInput = new JTextField(Integer.toString(defaultHeight));
+        heightInput.addActionListener(reloadPreviewListener);
+
+        JLabel fileChooserLabel = new JLabel("Save to");
+        saveLocationLabel = new JLabel("Choose location...");
+        JButton openFileChooserButton = new JButton("Choose location");
+        openFileChooserButton.addActionListener(new OpenFileChooserListener());
+        fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        JPanel fileChooserSaveLocationContainer = new JPanel();
+        fileChooserSaveLocationContainer.setLayout(new FlowLayout(FlowLayout.LEFT));
+        fileChooserSaveLocationContainer.add(openFileChooserButton);
+        fileChooserSaveLocationContainer.add(saveLocationLabel);
 
         generalSettingsPanel.setBorder(BorderFactory.createTitledBorder("General settings"));
 
@@ -80,10 +102,12 @@ public class ExportDisplay extends JFrame {
                 layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(widthLabel)
-                                .addComponent(heightLabel))
+                                .addComponent(heightLabel)
+                                .addComponent(fileChooserLabel))
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                 .addComponent(widthInput)
-                                .addComponent(heightInput))
+                                .addComponent(heightInput)
+                                .addComponent(fileChooserSaveLocationContainer))
         );
         layout.setVerticalGroup(
                 layout.createSequentialGroup()
@@ -93,18 +117,25 @@ public class ExportDisplay extends JFrame {
                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                 .addComponent(heightLabel)
                                 .addComponent(heightInput))
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addComponent(fileChooserLabel)
+                                .addComponent(fileChooserSaveLocationContainer))
         );
 
         // Action panel
+        JPanel actionsPanel = new JPanel();
         JButton renderButton = new JButton("Render");
         actionsPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
         actionsPanel.add(renderButton);
 
-        // Build layout for gui
-        setLayout(new BorderLayout());
+        // Settings panel
+        JPanel settingsPanel = new JPanel();
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.PAGE_AXIS));
         settingsPanel.add(generalSettingsPanel);
         settingsPanel.add(actionsPanel);
+
+        // Gui
+        setLayout(new BorderLayout());
         add(settingsPanel, BorderLayout.CENTER);
         add(previewPanel, BorderLayout.EAST);
 
@@ -120,7 +151,7 @@ public class ExportDisplay extends JFrame {
         this.scale = scale;
         setVisible(true);
 
-        previewPanel.loadPreview(fractal, colorScheme, scale, renderSettings);
+        previewPanel.loadPreview(fractal, colorScheme, scale, new RenderSettings(defaultWidth, defaultHeight));
     }
 
     public void close() {
@@ -134,10 +165,34 @@ public class ExportDisplay extends JFrame {
         }
     }
 
-    private class PreviewRendererEventListener extends RendererEventAdapter {
+    private class OpenFileChooserListener implements ActionListener {
         @Override
-        public void onRenderCompleted(RenderCompletedEvent event) {
+        public void actionPerformed(ActionEvent event) {
+            int returnVal = fileChooser.showOpenDialog(ExportDisplay.this);
 
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                saveLocation = fileChooser.getSelectedFile();
+                saveLocationLabel.setText(saveLocation.toString());
+            }
+        }
+    }
+
+    private class ReloadPreviewListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent event) {
+            // Validate data
+            int width, height;
+
+            try {
+                width = Integer.parseInt(widthInput.getText());
+                height = Integer.parseInt(heightInput.getText());
+            } catch (NumberFormatException e) {
+                // TODO: Show error
+                return;
+            }
+
+            // Data validated, render preview
+            previewPanel.loadPreview(fractal, colorScheme, scale, new RenderSettings(width, height));
         }
     }
 }
