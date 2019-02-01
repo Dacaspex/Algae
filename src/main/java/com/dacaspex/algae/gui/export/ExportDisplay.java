@@ -62,7 +62,7 @@ public class ExportDisplay extends JFrame {
     }
 
     public void build() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // TEMP
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(displayWidth, displayHeight));
         setTitle("Export as image");
 
