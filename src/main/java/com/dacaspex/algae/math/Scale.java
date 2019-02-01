@@ -2,67 +2,71 @@ package com.dacaspex.algae.math;
 
 public class Scale {
 
+    /**
+     * Center of the scale
+     */
     private Vector2d center;
+    /**
+     * Zoom level. 1 / zoomLevel determines the amount of pixels in either the width or height
+     * direction, depending on which is bigger.
+     */
     private double zoomLevel;
-    private double xDensity, yDensity;
-
-    public Scale(Vector2d center, double zoomLevel, double xDensity, double yDensity) {
-        this.center = center;
-        this.zoomLevel = zoomLevel;
-        this.xDensity = xDensity;
-        this.yDensity = yDensity;
-    }
 
     public Scale(Vector2d center, double zoomLevel) {
-        this(center, zoomLevel, 0.002, 0.002);
-    }
-
-    public Scale(Vector2d center) {
-        this(center, 1, 0.002, 0.002);
+        this.center = center;
+        this.zoomLevel = zoomLevel;
     }
 
     public Scale() {
-        this(new Vector2d(), 1, 0.002, 0.002);
-    }
-
-    public void setCenter(Vector2d center) {
-        this.center = center;
+        this(new Vector2d(), 1);
     }
 
     public double getZoomLevel() {
         return zoomLevel;
     }
 
-    public void setZoomLevel(double zoomLevel) {
-        this.zoomLevel = zoomLevel;
-    }
+    /**
+     * Maps a point on the screen to a point in the scale
+     *
+     * @param point  Point on the screen (0 <= point.x <= width, 0 <= point.y <= height)
+     * @param width  Width of the screen
+     * @param height Height of the screen
+     * @return Mapped point in the scale
+     */
+    public Vector2d getScreenPointInScale(Vector2d point, int width, int height) {
+        double stepSize = Math.max(1.0f / (width * zoomLevel), 1.0f / (height * zoomLevel));
+        double xMin = center.x - 0.5f * width * stepSize;
+        double yMin = center.y - 0.5f * height * stepSize;
 
-    public Vector2d getScreenPointInScale(Vector2d screenPoint, int screenWidth, int screenHeight) {
-        // Calculate x point
-        double xScreen = screenPoint.x - (screenWidth / 2.0);
-        double x = center.x + xDensity * (1 / zoomLevel) * xScreen;
-
-        // Calculate x point
-        double yScreen = screenPoint.y - (screenHeight / 2.0);
-        double y = center.y - yDensity * (1 / zoomLevel) * yScreen;
+        double x = xMin + point.x * stepSize;
+        double y = yMin + point.y * stepSize;
 
         return new Vector2d(x, y);
     }
 
+    /**
+     * Generates a list of points such that each coordinate in the map p[width][height] is mapped to
+     * a point in the scale. The aspect ratios are maintained.
+     *
+     * @param width  Width of the map
+     * @param height Height of the map
+     * @return 2-dimensional mapping between integer map m[width][height] and the scale
+     */
     public Vector2d[][] getPoints(int width, int height) {
         Vector2d[][] points = new Vector2d[width][height];
 
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
-                // Map x to [-0.5width, 0.5width], vice versa for y
-                int xMapped = x - (width / 2);
-                int yMapped = y - (height / 2);
+        // step_size = max(step_size_x, step_size_y)
+        // step_size_x = (1/z) / width ;
+        double stepSize = Math.max(1.0f / (width * zoomLevel), 1.0f / (height * zoomLevel));
+        double xMin = center.x - 0.5f * width * stepSize;
+        double yMin = center.y - 0.5f * height * stepSize;
 
-                // Calculate point in scale
-                points[x][y] = new Vector2d(
-                        center.x + xDensity * (1 / zoomLevel) * xMapped,
-                        center.y - yDensity * (1 / zoomLevel) * yMapped
-                );
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                double x = xMin + i * stepSize;
+                double y = yMin + j * stepSize;
+
+                points[i][j] = new Vector2d(x, y);
             }
         }
 
