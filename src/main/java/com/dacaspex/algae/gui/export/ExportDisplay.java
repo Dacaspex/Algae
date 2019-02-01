@@ -181,7 +181,7 @@ public class ExportDisplay extends JFrame {
             Date date = new Date();
             String fileName = "export-" + dateFormat.format(date) + ".png";
 
-            File file = new File(saveLocation.getPath() + "\\" + fileName);
+            File file = new File(saveLocation.getPath(), fileName);
 
             // Attempt to save the file
             try {
