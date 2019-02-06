@@ -1,4 +1,4 @@
-package com.dacaspex.algae.uitl;
+package com.dacaspex.algae.util;
 
 public class Pair<K, V> {
     private final K key;

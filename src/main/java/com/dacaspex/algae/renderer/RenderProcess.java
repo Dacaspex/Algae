@@ -8,7 +8,7 @@ import com.dacaspex.algae.math.Vector2d;
 import com.dacaspex.algae.renderer.event.EventDispatcher;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
 import com.dacaspex.algae.renderer.event.RenderEvent;
-import com.dacaspex.algae.uitl.Pair;
+import com.dacaspex.algae.util.Pair;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
