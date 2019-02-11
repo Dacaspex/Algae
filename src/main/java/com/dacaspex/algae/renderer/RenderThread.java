@@ -2,8 +2,8 @@ package com.dacaspex.algae.renderer;
 
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.fractal.Fractal;
-import com.dacaspex.algae.math.Complex;
-import com.dacaspex.algae.math.Vector2d;
+import com.dacaspex.algae.util.math.Complex;
+import com.dacaspex.algae.util.math.Vector2d;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -1,6 +1,6 @@
 package com.dacaspex.algae.fractal;
 
-import com.dacaspex.algae.math.Complex;
+import com.dacaspex.algae.util.math.Complex;
 
 import java.util.ArrayList;
 import java.util.List;

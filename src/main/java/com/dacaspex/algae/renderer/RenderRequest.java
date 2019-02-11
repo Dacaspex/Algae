@@ -2,7 +2,7 @@ package com.dacaspex.algae.renderer;
 
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.fractal.Fractal;
-import com.dacaspex.algae.math.Scale;
+import com.dacaspex.algae.util.math.Scale;
 
 public class RenderRequest {
     public final Fractal fractal;

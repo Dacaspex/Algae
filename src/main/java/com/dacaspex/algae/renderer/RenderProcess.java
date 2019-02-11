@@ -2,9 +2,9 @@ package com.dacaspex.algae.renderer;
 
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.fractal.Fractal;
-import com.dacaspex.algae.math.Complex;
-import com.dacaspex.algae.math.Scale;
-import com.dacaspex.algae.math.Vector2d;
+import com.dacaspex.algae.util.math.Complex;
+import com.dacaspex.algae.util.math.Scale;
+import com.dacaspex.algae.util.math.Vector2d;
 import com.dacaspex.algae.renderer.event.EventDispatcher;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
 import com.dacaspex.algae.renderer.event.RenderEvent;

@@ -6,17 +6,19 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class colorBandPanel extends JPanel {
 
-    private final int MIN_MARKER_DISTANCE = 3;
+    private final int MIN_MARKER_DISTANCE = 10;
 
     private final int panelWidth;
 
     private List<Marker> markers;
+    private Marker selectedMarker;
+    private Marker draggingMarker;
 
     /* GUI components */
     private Canvas canvas;
@@ -36,25 +38,26 @@ public class colorBandPanel extends JPanel {
         canvas.build();
 
         // Initialise color band
-        markers.add(new Marker(0, Color.BLUE));
+        markers.add(new Marker(0, Color.BLUE, true));
         markers.add(new Marker(0.5, Color.GREEN));
-        markers.add(new Marker(1, Color.RED));
+        markers.add(new Marker(0.7, Color.YELLOW));
+        markers.add(new Marker(1, Color.RED, true));
 
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
     }
 
     private class Canvas extends JPanel {
-        private boolean dragging;
-
         public void build() {
-            dragging = false;
             addMouseListener(new MouseListener());
+            addMouseMotionListener(new MouseMotionListener());
         }
 
         @Override
-        public void paint(Graphics g) {
-            super.paint(g);
+        public void paint(Graphics graphics) {
+            super.paint(graphics);
+
+            Graphics2D g = (Graphics2D) graphics;
 
             ColorBand colorBand = new ColorBand();
             markers.forEach(m -> colorBand.add(m.position, m.color));
@@ -63,52 +66,76 @@ public class colorBandPanel extends JPanel {
                 g.setColor(colorBand.get((double) x / this.getWidth()));
                 g.fillRect(x, 0, 1, 40);
             }
+
+            for (Marker marker : markers) {
+                int x = (int) (marker.position * this.getWidth());
+                int y = 40;
+                int height = 20;
+                int width = 10;
+
+                g.setColor(marker.color);
+                g.fillPolygon(
+                        new int[]{x, x + width, x - width},
+                        new int[]{y, y + height, y + height},
+                        3
+                );
+            }
+        }
+
+        public Marker getClosestMarker(int x) {
+            Marker candidate = null;
+            int candidateDistance = Integer.MAX_VALUE;
+
+            for (Marker m : markers) {
+                double distance = Math.abs(x - m.position * canvas.getWidth());
+
+                if (distance <= MIN_MARKER_DISTANCE && distance < candidateDistance && !m.fixed) {
+                    candidate = m;
+                    candidateDistance = (int) distance;
+                }
+            }
+
+            return candidate;
         }
     }
 
     private class Marker {
         private double position;
         private Color color;
+        private boolean fixed;
 
-        public Marker(double position, Color color) {
+        public Marker(double position, Color color, boolean fixed) {
             this.position = position;
             this.color = color;
+            this.fixed = fixed;
+        }
+
+        public Marker(double position, Color color) {
+            this(position, color, false);
         }
     }
 
     private class MouseListener extends MouseAdapter {
         @Override
-        public void mousePressed(MouseEvent mouseEvent) {
-            canvas.dragging = true;
-            int mousePosition = mouseEvent.getX();
+        public void mousePressed(MouseEvent e) {
+            Marker marker = canvas.getClosestMarker(e.getX());
 
-            // Find closest marker
-            Marker candidate = null;
-            int candidateDistance = Integer.MAX_VALUE;
-            for (Marker m : markers) {
-                if (Math.abs(mousePosition - m.position) <= MIN_MARKER_DISTANCE) {
-                    if (Math.abs(mousePosition - m.position) < candidateDistance) {
-                        candidate = m;
-                        candidateDistance = (int) Math.abs(mousePosition - m.position);
-                    }
-                }
-            }
-
-            if (candidate != null) {
-                canvas.dragging = true;
-                // TODO: ...
-            }
+            selectedMarker = marker;
+            draggingMarker = marker;
         }
 
         @Override
-        public void mouseReleased(MouseEvent mouseEvent) {
-            canvas.dragging = false;
+        public void mouseReleased(MouseEvent e) {
+            draggingMarker = null;
         }
+    }
 
+    private class MouseMotionListener extends MouseMotionAdapter {
         @Override
-        public void mouseWheelMoved(MouseWheelEvent mouseWheelEvent) {
-            if (canvas.dragging) {
-                // ...
+        public void mouseDragged(MouseEvent e) {
+            if (draggingMarker != null) {
+                draggingMarker.position = (double) e.getPoint().x / canvas.getWidth();
+                repaint();
             }
         }
     }
