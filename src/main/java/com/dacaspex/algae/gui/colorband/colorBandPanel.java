@@ -16,6 +16,8 @@ public class colorBandPanel extends JPanel {
 
     private final int panelWidth;
 
+    private final List<ColorBandEventListener> listeners;
+
     private List<Marker> markers;
     private Marker selectedMarker;
     private Marker draggingMarker;
@@ -25,6 +27,7 @@ public class colorBandPanel extends JPanel {
 
     public colorBandPanel(int panelWidth) {
         this.panelWidth = panelWidth;
+        this.listeners = new ArrayList<>();
         this.markers = new ArrayList<>();
     }
 
@@ -45,6 +48,14 @@ public class colorBandPanel extends JPanel {
 
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
+    }
+
+    public void addEventListener(ColorBandEventListener eventListener) {
+        listeners.add(eventListener);
+    }
+
+    public void update() {
+        canvas.repaint();
     }
 
     private class Canvas extends JPanel {
@@ -89,7 +100,7 @@ public class colorBandPanel extends JPanel {
             for (Marker m : markers) {
                 double distance = Math.abs(x - m.position * canvas.getWidth());
 
-                if (distance <= MIN_MARKER_DISTANCE && distance < candidateDistance && !m.fixed) {
+                if (distance <= MIN_MARKER_DISTANCE && distance < candidateDistance) {
                     candidate = m;
                     candidateDistance = (int) distance;
                 }
@@ -99,29 +110,18 @@ public class colorBandPanel extends JPanel {
         }
     }
 
-    private class Marker {
-        private double position;
-        private Color color;
-        private boolean fixed;
-
-        public Marker(double position, Color color, boolean fixed) {
-            this.position = position;
-            this.color = color;
-            this.fixed = fixed;
-        }
-
-        public Marker(double position, Color color) {
-            this(position, color, false);
-        }
-    }
-
     private class MouseListener extends MouseAdapter {
         @Override
         public void mousePressed(MouseEvent e) {
             Marker marker = canvas.getClosestMarker(e.getX());
 
             selectedMarker = marker;
-            draggingMarker = marker;
+
+            if (marker == null || !marker.fixed) {
+                draggingMarker = marker;
+            }
+
+            listeners.forEach(l -> l.onMarkerSelected(marker));
         }
 
         @Override
@@ -136,6 +136,7 @@ public class colorBandPanel extends JPanel {
             if (draggingMarker != null) {
                 draggingMarker.position = (double) e.getPoint().x / canvas.getWidth();
                 repaint();
+                listeners.forEach(l -> l.onMarkerUpdated(draggingMarker));
             }
         }
     }
