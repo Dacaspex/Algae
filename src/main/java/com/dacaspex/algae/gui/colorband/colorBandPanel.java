@@ -9,6 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class colorBandPanel extends JPanel {
 
@@ -56,6 +57,19 @@ public class colorBandPanel extends JPanel {
 
     public void update() {
         canvas.repaint();
+    }
+
+    public void addMarker() {
+        double position = (new Random()).nextDouble();
+        markers.add(new Marker(position, Color.WHITE));
+        update();
+    }
+
+    public void removeMarker() {
+        if (this.selectedMarker != null && !selectedMarker.fixed) {
+            markers.remove(selectedMarker);
+            update();
+        }
     }
 
     private class Canvas extends JPanel {

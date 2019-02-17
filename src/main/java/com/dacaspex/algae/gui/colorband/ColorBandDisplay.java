@@ -49,6 +49,7 @@ public class ColorBandDisplay extends JFrame {
 
         JPanel colorPickerPanel = new JPanel();
         settingsPanel.add(colorPickerPanel, BorderLayout.CENTER);
+        colorPickerPanel.setBorder(BorderFactory.createTitledBorder("Pick colour"));
 
         JPanel buttonsPanel = new JPanel();
         settingsPanel.add(buttonsPanel, BorderLayout.EAST);
@@ -85,10 +86,28 @@ public class ColorBandDisplay extends JFrame {
                                 .addComponent(colorPickerButton))
         );
 
+        // Create button panel
         removeMarkerButton = new JButton("Remove marker");
+        removeMarkerButton.addActionListener(new RemoveMarkerListener());
         addMarkerButton = new JButton("Add marker button");
+        addMarkerButton.addActionListener(new AddMarkerListener());
 
-        // TODO: Create button panel
+        GroupLayout buttonsLayout = new GroupLayout(buttonsPanel);
+        buttonsPanel.setLayout(buttonsLayout);
+        buttonsLayout.setAutoCreateGaps(true);
+        buttonsLayout.setAutoCreateContainerGaps(true);
+
+        buttonsLayout.setHorizontalGroup(
+                buttonsLayout.createParallelGroup()
+                        .addComponent(addMarkerButton)
+                        .addComponent(removeMarkerButton)
+        );
+        buttonsLayout.setVerticalGroup(
+                buttonsLayout.createSequentialGroup()
+                        .addGroup(buttonsLayout.createSequentialGroup()
+                                .addComponent(addMarkerButton)
+                                .addComponent(removeMarkerButton))
+        );
 
         // Build action panel
         JPanel actionPanel = new JPanel();
@@ -150,6 +169,20 @@ public class ColorBandDisplay extends JFrame {
         @Override
         public void onMarkerUpdated(Marker marker) {
             updateLabels(marker);
+        }
+    }
+
+    private class AddMarkerListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            colorbandPanel.addMarker();
+        }
+    }
+
+    private class RemoveMarkerListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent actionEvent) {
+            colorbandPanel.removeMarker();
         }
     }
 }
