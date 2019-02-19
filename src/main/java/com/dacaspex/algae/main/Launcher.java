@@ -1,7 +1,6 @@
 package com.dacaspex.algae.main;
 
 import com.dacaspex.algae.gui.Gui;
-import com.dacaspex.algae.gui.colorband.ColorBandDisplay;
 import com.dacaspex.algae.gui.settings.colorScheme.*;
 import com.dacaspex.algae.gui.settings.fractal.BurningShipSettingsProvider;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
@@ -14,15 +13,6 @@ import java.util.Map;
 public class Launcher {
 
     public static void main(String[] args) {
-
-        ColorBandDisplay cd = new ColorBandDisplay();
-        cd.build();
-        cd.open();
-
-        if (true) {
-            return;
-        }
-
         // We use a {@code LinkedHashMap} for this implementation to make sure the order is the same
         // everywhere as the insertion order.
         Map<String, FractalSettingsProvider> fractalSettings = new LinkedHashMap<String, FractalSettingsProvider>() {{

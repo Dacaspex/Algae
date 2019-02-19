@@ -1,5 +1,7 @@
 package com.dacaspex.algae.gui.colorband;
 
+import com.dacaspex.algae.util.ColorBand;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,11 +9,12 @@ import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-public class ColorBandDisplay extends JFrame {
+public class ColorBandDisplay extends JPanel {
 
     private final int displayWidth;
     private final int displayHeight;
 
+    private ColorBand colorBand;
     private colorBandPanel colorbandPanel;
     private Marker selectedMarker;
 
@@ -26,19 +29,17 @@ public class ColorBandDisplay extends JFrame {
     private JButton removeMarkerButton;
     private JButton addMarkerButton;
 
-    public ColorBandDisplay() {
+    public ColorBandDisplay(ColorBand colorBand) {
         this.displayWidth = 400;
         this.displayHeight = 300;
+        this.colorBand = colorBand;
     }
 
     public void build() {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // TEMP
         setPreferredSize(new Dimension(displayWidth, displayHeight));
-        setTitle("Colourband creator");
-        setResizable(false);
 
         // Build color band panel
-        colorbandPanel = new colorBandPanel(displayWidth);
+        colorbandPanel = new colorBandPanel(colorBand, displayWidth);
         colorbandPanel.build();
         colorbandPanel.addEventListener(new ColorBandEventListener());
 
@@ -120,15 +121,12 @@ public class ColorBandDisplay extends JFrame {
         actionPanel.add(cancelButton);
         actionPanel.add(confirmButton);
 
-        LayoutManager layout = new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS);
+        LayoutManager layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         setLayout(layout);
 
         add(colorbandPanel);
         add(settingsPanel);
         add(actionPanel);
-
-        pack();
-        setVisible(false);
     }
 
     public void updateLabels(Marker marker) {

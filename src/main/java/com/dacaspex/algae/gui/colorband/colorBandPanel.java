@@ -19,6 +19,7 @@ public class colorBandPanel extends JPanel {
 
     private final List<ColorBandEventListener> listeners;
 
+    private ColorBand template;
     private List<Marker> markers;
     private Marker selectedMarker;
     private Marker draggingMarker;
@@ -26,7 +27,8 @@ public class colorBandPanel extends JPanel {
     /* GUI components */
     private Canvas canvas;
 
-    public colorBandPanel(int panelWidth) {
+    public colorBandPanel(ColorBand colorBand, int panelWidth) {
+        this.template = colorBand;
         this.panelWidth = panelWidth;
         this.listeners = new ArrayList<>();
         this.markers = new ArrayList<>();
@@ -42,10 +44,7 @@ public class colorBandPanel extends JPanel {
         canvas.build();
 
         // Initialise color band
-        markers.add(new Marker(0, Color.BLUE, true));
-        markers.add(new Marker(0.5, Color.GREEN));
-        markers.add(new Marker(0.7, Color.YELLOW));
-        markers.add(new Marker(1, Color.RED, true));
+        template.getColors().forEach(p -> markers.add(new Marker(p.getKey(), p.getValue())));
 
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);

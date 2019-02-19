@@ -18,6 +18,10 @@ public class ColorBand {
         this(new ArrayList<>());
     }
 
+    public List<Pair<Double, Color>> getColors() {
+        return colors;
+    }
+
     public void add(double position, Color color) {
         colors.add(new Pair<>(position, color));
         sort();
