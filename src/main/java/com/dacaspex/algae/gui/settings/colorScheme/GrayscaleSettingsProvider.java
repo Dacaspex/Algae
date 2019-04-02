@@ -19,7 +19,6 @@ public class GrayscaleSettingsProvider implements ColorSchemeSettingsProvider {
 
     private DoubleProperty divisorProperty;
     private BooleanProperty invertedProperty;
-    private ColorBandProperty colorBandProperty;
 
     public GrayscaleSettingsProvider() {
         this.divisorProperty = new DoubleProperty(
@@ -31,21 +30,13 @@ public class GrayscaleSettingsProvider implements ColorSchemeSettingsProvider {
                         .build()
         );
         this.invertedProperty = new BooleanProperty("Inverted", false);
-        this.colorBandProperty = new ColorBandProperty(
-                "Test",
-                new ColorBand(new ArrayList<>(Arrays.asList(
-                        new Pair<>(0d, Color.BLACK),
-                        new Pair<>(1d, Color.BLUE)
-                )))
-        );
     }
 
     @Override
     public List<Property> getProperties() {
         return new ArrayList<>(Arrays.asList(
                 divisorProperty,
-                invertedProperty,
-                colorBandProperty
+                invertedProperty
         ));
     }
 

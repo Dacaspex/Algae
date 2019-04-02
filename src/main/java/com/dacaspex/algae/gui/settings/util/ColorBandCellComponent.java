@@ -29,7 +29,7 @@ public class ColorBandCellComponent extends AbstractCellComponent {
             ColorBandDisplay panel = new ColorBandDisplay(property.getValue());
             panel.build();
 
-            JOptionPane.showOptionDialog(
+            int option = JOptionPane.showOptionDialog(
                     null,
                     panel,
                     "Color band editor",
@@ -39,6 +39,13 @@ public class ColorBandCellComponent extends AbstractCellComponent {
                     new String[]{"Ok", "Cancel"},
                     "Cancel"
             );
+
+            if (option == 0) {
+                // Ok option
+                property.setValue(panel.getColorBand());
+                delegate.repaint();
+                eventDispatcher.dispatchUpdateEvent(property);
+            }
         });
     }
 

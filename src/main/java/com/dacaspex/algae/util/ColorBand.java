@@ -28,12 +28,20 @@ public class ColorBand {
     }
 
     public Color get(double alpha) {
+        if (alpha > 1) {
+            throw new IllegalArgumentException("Alpha cannot be larger than 1");
+        }
+
         if (colors.size() == 0) {
             throw new IllegalArgumentException("Colour interpolation cannot consist of zero colours");
         }
 
         if (colors.size() == 1) {
             return colors.get(0).getValue();
+        }
+
+        if (alpha == 1) {
+            return colors.get(colors.size() - 1).getValue();
         }
 
         int index = 0;

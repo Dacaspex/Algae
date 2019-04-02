@@ -18,9 +18,6 @@ public class ColorBandDisplay extends JPanel {
     private colorBandPanel colorbandPanel;
     private Marker selectedMarker;
 
-    private JButton cancelButton;
-    private JButton confirmButton;
-
     private JLabel positionLabel;
     private JLabel positionValueLabel;
     private JLabel colorLabel;
@@ -110,23 +107,15 @@ public class ColorBandDisplay extends JPanel {
                                 .addComponent(removeMarkerButton))
         );
 
-        // Build action panel
-        JPanel actionPanel = new JPanel();
-        actionPanel.setMaximumSize(new Dimension(displayWidth, 30));
-        actionPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 8, 0));
-
-        cancelButton = new JButton("Cancel");
-        confirmButton = new JButton("Confirm");
-
-        actionPanel.add(cancelButton);
-        actionPanel.add(confirmButton);
-
         LayoutManager layout = new BoxLayout(this, BoxLayout.Y_AXIS);
         setLayout(layout);
 
         add(colorbandPanel);
         add(settingsPanel);
-        add(actionPanel);
+    }
+
+    public ColorBand getColorBand() {
+        return colorbandPanel.getColorBand();
     }
 
     public void updateLabels(Marker marker) {

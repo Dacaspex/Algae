@@ -71,6 +71,13 @@ public class colorBandPanel extends JPanel {
         }
     }
 
+    public ColorBand getColorBand() {
+        ColorBand colorBand = new ColorBand();
+        markers.forEach(m -> colorBand.add(m.position, m.color));
+
+        return colorBand;
+    }
+
     private class Canvas extends JPanel {
         public void build() {
             addMouseListener(new MouseListener());
