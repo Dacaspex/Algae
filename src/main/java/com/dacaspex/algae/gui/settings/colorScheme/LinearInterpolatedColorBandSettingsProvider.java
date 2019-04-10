@@ -18,7 +18,7 @@ public class LinearInterpolatedColorBandSettingsProvider implements ColorSchemeS
 
     public LinearInterpolatedColorBandSettingsProvider() {
         this.colorBandProperty = new ColorBandProperty(
-                "Test",
+                "Color band",
                 new ColorBand(new ArrayList<>(Arrays.asList(
                         new Pair<>(0d, Color.BLACK),
                         new Pair<>(1d, Color.BLUE)

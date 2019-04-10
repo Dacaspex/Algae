@@ -35,6 +35,10 @@ public class colorBandPanel extends JPanel {
     }
 
     public void build() {
+        if (template.getColors().size() < 2) {
+            throw new RuntimeException("Color band initialised with less than 2 colours");
+        }
+
         setPreferredSize(new Dimension(panelWidth, 100));
         setMaximumSize(new Dimension(panelWidth, 100));
         setBorder(BorderFactory.createTitledBorder("Edit colour band"));
@@ -45,6 +49,8 @@ public class colorBandPanel extends JPanel {
 
         // Initialise color band
         template.getColors().forEach(p -> markers.add(new Marker(p.getKey(), p.getValue())));
+        markers.get(0).fixed = true;
+        markers.get(markers.size() - 1).fixed = true;
 
         setLayout(new BorderLayout());
         add(canvas, BorderLayout.CENTER);
