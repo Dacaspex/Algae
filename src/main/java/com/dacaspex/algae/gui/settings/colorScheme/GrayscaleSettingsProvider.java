@@ -2,11 +2,15 @@ package com.dacaspex.algae.gui.settings.colorScheme;
 
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.colorScheme.Grayscale;
+import com.dacaspex.algae.gui.settings.util.ColorBandProperty;
+import com.dacaspex.algae.util.ColorBand;
+import com.dacaspex.algae.util.Pair;
 import com.dacaspex.propertysheet.property.BooleanProperty;
 import com.dacaspex.propertysheet.property.DoubleProperty;
 import com.dacaspex.propertysheet.property.Property;
 import com.dacaspex.propertysheet.validator.doubleNumber.DoubleValidatorFactory;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

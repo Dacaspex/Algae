@@ -1,6 +1,6 @@
 package com.dacaspex.algae.gui.settings.util;
 
-import com.dacaspex.algae.math.Complex;
+import com.dacaspex.algae.util.math.Complex;
 import com.dacaspex.propertysheet.cell.AbstractCellComponent;
 import com.dacaspex.propertysheet.util.Keys;
 

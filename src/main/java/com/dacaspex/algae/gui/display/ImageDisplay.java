@@ -2,7 +2,7 @@ package com.dacaspex.algae.gui.display;
 
 import com.dacaspex.algae.gui.display.event.ImageDisplayEventDispatcher;
 import com.dacaspex.algae.gui.display.event.ImageDisplayEventListener;
-import com.dacaspex.algae.math.Vector2d;
+import com.dacaspex.algae.util.math.Vector2d;
 
 import javax.swing.*;
 import java.awt.*;

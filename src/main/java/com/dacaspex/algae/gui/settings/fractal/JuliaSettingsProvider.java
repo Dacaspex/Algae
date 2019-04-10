@@ -3,7 +3,7 @@ package com.dacaspex.algae.gui.settings.fractal;
 import com.dacaspex.algae.fractal.Fractal;
 import com.dacaspex.algae.fractal.JuliaFractal;
 import com.dacaspex.algae.gui.settings.util.ComplexProperty;
-import com.dacaspex.algae.math.Complex;
+import com.dacaspex.algae.util.math.Complex;
 import com.dacaspex.propertysheet.property.DoubleProperty;
 import com.dacaspex.propertysheet.property.IntegerProperty;
 import com.dacaspex.propertysheet.property.Property;

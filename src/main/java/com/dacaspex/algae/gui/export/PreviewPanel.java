@@ -2,7 +2,7 @@ package com.dacaspex.algae.gui.export;
 
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.fractal.Fractal;
-import com.dacaspex.algae.math.Scale;
+import com.dacaspex.algae.util.math.Scale;
 import com.dacaspex.algae.renderer.RenderSettings;
 import com.dacaspex.algae.renderer.Renderer;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;

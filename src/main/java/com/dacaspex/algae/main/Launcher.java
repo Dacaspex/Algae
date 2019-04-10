@@ -25,6 +25,7 @@ public class Launcher {
             put("Normalised Grayscale", new NormalisedGrayscaleSettingsProvider());
             put("Sin Waves", new WaveColorSchemeSettingsProvider());
             put("Angle Grayscale", new AngleGrayscaleSettingsProvider());
+            put("Linear interpolated", new LinearInterpolatedColorBandSettingsProvider());
         }};
 
         (new Gui(fractalSettings, colorSchemeSettings)).build();

@@ -1,6 +1,6 @@
 package com.dacaspex.algae.gui.display.event;
 
-import com.dacaspex.algae.math.Vector2d;
+import com.dacaspex.algae.util.math.Vector2d;
 
 import java.util.ArrayList;
 import java.util.List;

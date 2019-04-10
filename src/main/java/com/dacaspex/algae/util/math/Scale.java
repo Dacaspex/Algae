@@ -1,4 +1,4 @@
-package com.dacaspex.algae.math;
+package com.dacaspex.algae.util.math;
 
 public class Scale {
 

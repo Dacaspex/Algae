@@ -1,6 +1,8 @@
 package com.dacaspex.algae.gui.settings;
 
 import com.dacaspex.algae.gui.settings.event.SettingUpdatedListener;
+import com.dacaspex.algae.gui.settings.util.ColorBandCellComponent;
+import com.dacaspex.algae.gui.settings.util.ColorBandProperty;
 import com.dacaspex.algae.gui.settings.util.ComplexCellComponent;
 import com.dacaspex.algae.gui.settings.util.ComplexProperty;
 import com.dacaspex.propertysheet.PropertySheet;
@@ -57,6 +59,8 @@ public class SettingsDisplay extends JFrame {
         for (Property p : settingsProvider.getProperties()) {
             if (p instanceof ComplexProperty) {
                 propertySheet.addProperty(p, new ComplexCellComponent((ComplexProperty) p));
+            } else if (p instanceof ColorBandProperty) {
+                propertySheet.addProperty(p, new ColorBandCellComponent((ColorBandProperty) p));
             } else {
                 propertySheet.addProperty(p);
             }
