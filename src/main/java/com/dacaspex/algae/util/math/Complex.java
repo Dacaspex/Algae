@@ -128,8 +128,8 @@ public class Complex {
 
     @Override
     public String toString() {
-        String realSign = real >= 0 ? "" : "-";
-        String imaginarySign = imaginary >= 0 ? "+" : "-";
+        String realSign = real >= 0 ? "" : "";
+        String imaginarySign = imaginary >= 0 ? "+" : "";
 
         return realSign + real + imaginarySign + imaginary + "i";
     }
