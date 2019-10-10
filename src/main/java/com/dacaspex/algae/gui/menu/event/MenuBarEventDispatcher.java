@@ -38,6 +38,22 @@ public class MenuBarEventDispatcher {
         listeners.forEach(MenuBarEventListener::onExportDisplayOpened);
     }
 
+    public void dispatchExportFractalSettingsDisplayOpened() {
+        listeners.forEach(MenuBarEventListener::onExportFractalSettingsDisplayOpened);
+    }
+
+    public void dispatchExportColorSchemeSettingsDisplayOpened() {
+        listeners.forEach(MenuBarEventListener::onExportColorSchemeSettingsDisplayOpened);
+    }
+
+    public void dispatchImportFractalSettingsDisplayOpened() {
+        listeners.forEach(MenuBarEventListener::onImportFractalSettingsDisplayOpened);
+    }
+
+    public void dispatchImportColorSchemeSettingsDisplayOpened() {
+        listeners.forEach(MenuBarEventListener::onImportColorSchemeSettingsDisplayOpened);
+    }
+
     public void dispatchExit() {
         listeners.forEach(MenuBarEventListener::onExit);
     }

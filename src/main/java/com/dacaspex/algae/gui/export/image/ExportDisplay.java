@@ -1,4 +1,4 @@
-package com.dacaspex.algae.gui.export;
+package com.dacaspex.algae.gui.export.image;
 
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.fractal.Fractal;

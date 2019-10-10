@@ -15,5 +15,13 @@ public interface MenuBarEventListener {
 
     public void onExportDisplayOpened();
 
+    public void onExportFractalSettingsDisplayOpened();
+
+    public void onExportColorSchemeSettingsDisplayOpened();
+
+    public void onImportFractalSettingsDisplayOpened();
+
+    public void onImportColorSchemeSettingsDisplayOpened();
+
     public void onExit();
 }

@@ -27,6 +27,12 @@ public class MenuBar extends JMenuBar {
     public void build() {
         JMenu fileMenu = new JMenu("File");
         fileMenu.add(new OpenExportDisplayMenuItem(eventDispatcher, "Export image"));
+        fileMenu.add(new OpenExportFractalSettingsDisplayMenuItem(eventDispatcher, "Export fractal settings"));
+        fileMenu.add(new OpenExportColorSchemeSettingsDisplayMenuItem(eventDispatcher, "Export color scheme settings"));
+        fileMenu.addSeparator();
+        fileMenu.add(new OpenImportFractalSettingsDisplayMenuItem(eventDispatcher, "Import fractal settings"));
+        fileMenu.add(new OpenImportColorSchemeSettingsDisplayMenuItem(eventDispatcher, "Import color scheme settings"));
+        fileMenu.addSeparator();
         fileMenu.add(new ExitMenuItem(eventDispatcher, "Close application"));
 
         JMenu fractalMenu = new JMenu("Fractals");

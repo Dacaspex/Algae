@@ -3,7 +3,9 @@ package com.dacaspex.algae.gui;
 import com.dacaspex.algae.colorScheme.ColorScheme;
 import com.dacaspex.algae.fractal.Fractal;
 import com.dacaspex.algae.gui.display.ImageDisplay;
-import com.dacaspex.algae.gui.export.ExportDisplay;
+import com.dacaspex.algae.gui.export.file.ExportJsonSettingsDisplay;
+import com.dacaspex.algae.gui.export.image.ExportDisplay;
+import com.dacaspex.algae.gui.iimport.ImportSettingsDisplay;
 import com.dacaspex.algae.gui.menu.MenuBar;
 import com.dacaspex.algae.gui.settings.SettingsDisplay;
 import com.dacaspex.algae.gui.settings.SettingsProvider;
@@ -11,18 +13,19 @@ import com.dacaspex.algae.gui.settings.colorScheme.ColorSchemeSettingsProvider;
 import com.dacaspex.algae.gui.settings.event.SettingUpdatedListener;
 import com.dacaspex.algae.gui.settings.fractal.FractalSettingsProvider;
 import com.dacaspex.algae.gui.status.StatusBar;
-import com.dacaspex.algae.util.math.Scale;
-import com.dacaspex.algae.util.math.Vector2d;
 import com.dacaspex.algae.renderer.RenderSettings;
 import com.dacaspex.algae.renderer.Renderer;
 import com.dacaspex.algae.renderer.event.RenderCompletedEvent;
 import com.dacaspex.algae.renderer.event.RenderEvent;
 import com.dacaspex.algae.renderer.event.RendererEventAdapter;
+import com.dacaspex.algae.util.math.Scale;
+import com.dacaspex.algae.util.math.Vector2d;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Gui extends JFrame {
@@ -40,10 +43,14 @@ public class Gui extends JFrame {
 
     private final ExportDisplay exportDisplay;
 
+    private final ImportSettingsDisplay importSettingsDisplay;
+
     private boolean exited;
 
     private Fractal fractal;
+    private FractalSettingsProvider fractalSettingsProvider;
     private ColorScheme colorScheme;
+    private ColorSchemeSettingsProvider colorSchemeSettingsProvider;
     private Scale scale;
     private RenderSettings renderSettings;
 
@@ -68,8 +75,17 @@ public class Gui extends JFrame {
 
         this.exportDisplay = new ExportDisplay();
 
+        this.importSettingsDisplay = new ImportSettingsDisplay(
+                this,
+                new ArrayList<>(fractalSettings.values()),
+                new ArrayList<>(colorSchemeSettings.values())
+        );
+
         this.fractal = fractalSettings.get(defaultFractalKey).getFractal();
+        this.fractalSettingsProvider = fractalSettings.get(defaultFractalKey);
         this.colorScheme = colorSchemeSettings.get(defaultColorSchemeKey).getColorScheme();
+        this.colorSchemeSettingsProvider = colorSchemeSettings.get(defaultColorSchemeKey);
+
         this.scale = new Scale();
         // Render settings are intentionally not initialised now, since it requires the dimensions of the
         // image display.
@@ -134,16 +150,18 @@ public class Gui extends JFrame {
 
     private class MenuBarBarEventListener implements com.dacaspex.algae.gui.menu.event.MenuBarEventListener {
         @Override
-        public void onFractalSettingsSelected(FractalSettingsProvider fractalSettings) {
-            fractal = fractalSettings.getFractal();
-            fractalSettingsDisplay.updateSettingsProvider(fractalSettings);
+        public void onFractalSettingsSelected(FractalSettingsProvider fractalSettingsProvider) {
+            fractal = fractalSettingsProvider.getFractal();
+            Gui.this.fractalSettingsProvider = fractalSettingsProvider;
+            fractalSettingsDisplay.updateSettingsProvider(fractalSettingsProvider);
             render();
         }
 
         @Override
-        public void onColorSchemeSettingsSelected(ColorSchemeSettingsProvider colorSchemeSettings) {
-            colorScheme = colorSchemeSettings.getColorScheme();
-            colorSchemeSettingsDisplay.updateSettingsProvider(colorSchemeSettings);
+        public void onColorSchemeSettingsSelected(ColorSchemeSettingsProvider colorSchemeSettingsProvider) {
+            colorScheme = colorSchemeSettingsProvider.getColorScheme();
+            Gui.this.colorSchemeSettingsProvider = colorSchemeSettingsProvider;
+            colorSchemeSettingsDisplay.updateSettingsProvider(colorSchemeSettingsProvider);
             render();
         }
 
@@ -160,6 +178,38 @@ public class Gui extends JFrame {
         @Override
         public void onExportDisplayOpened() {
             exportDisplay.open(fractal, colorScheme, scale);
+        }
+
+        @Override
+        public void onExportFractalSettingsDisplayOpened() {
+            ExportJsonSettingsDisplay.export(fractalSettingsProvider, Gui.this);
+        }
+
+        @Override
+        public void onExportColorSchemeSettingsDisplayOpened() {
+            ExportJsonSettingsDisplay.export(colorSchemeSettingsProvider, Gui.this);
+        }
+
+        @Override
+        public void onImportFractalSettingsDisplayOpened() {
+            FractalSettingsProvider provider = importSettingsDisplay.importFractalSettings();
+            if (provider != null) {
+                fractalSettingsProvider = provider;
+                fractal = provider.getFractal();
+                fractalSettingsDisplay.updateSettingsProvider(provider);
+                render();
+            }
+        }
+
+        @Override
+        public void onImportColorSchemeSettingsDisplayOpened() {
+            ColorSchemeSettingsProvider provider = importSettingsDisplay.importColorSchemeSettings();
+            if (provider != null) {
+                colorSchemeSettingsProvider = provider;
+                colorScheme = provider.getColorScheme();
+                colorSchemeSettingsDisplay.updateSettingsProvider(provider);
+                render();
+            }
         }
 
         @Override
