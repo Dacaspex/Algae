@@ -1,5 +1,6 @@
 # Algae
-.. todo image .. 
+![fractal header image](https://github.com/Dacaspex/Algae/blob/master/.github/images/export-2020-06-08%20-%2022-30-23-crop.png)
+
 > A fractal image exploration and generator for the Julia Set, Mandelbrot Set and Burning Ship fractal.
 
 This program is capable of generating fractal images the three mentioned fractal types. Various colouring algorithms
@@ -12,7 +13,16 @@ with reusable components. The idea behind the program was to have a balance betw
 fractals to generate stunning images to use as wallpapers/icons/etc.
 
 ## Examples
-.. todo images ..
+<table>
+  <tr>
+    <td valign="top"><img src="https://github.com/Dacaspex/Algae/blob/master/.github/images/export-2020-06-08--22-48-08.png"></td>
+    <td valign="top"><img src="https://github.com/Dacaspex/Algae/blob/master/.github/images/export-2020-06-08--22-42-24.png"></td>
+  </tr>
+  <tr>
+    <td valign="top"><img src="https://github.com/Dacaspex/Algae/blob/master/.github/images/export-2020-06-08--22-50-01.png"></td>
+    <td valign="top"><img src="https://github.com/Dacaspex/Algae/blob/master/.github/images/export-2020-06-08--22-54-49.png"></td>
+  </tr>
+</table>
 
 ## Installation instructions
 This program uses Maven to compile and requires one external dependency, namely [PropertySheet](https://github.com/Dacaspex/PropertySheet). 
