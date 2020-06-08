@@ -1,7 +1,7 @@
 # IDEA
 .idea/*
 *.iml
-*.png
+export/*
 
 target/*
 
